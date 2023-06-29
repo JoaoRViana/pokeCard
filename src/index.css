@@ -1,13 +1,217 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
+
+.styledText {
+    font-family: "Audiowide", cursive;
+    color: #333;
+    text-shadow: -0.01em -0.01em 0.01em #000;
+}
+.pokeCard{
+    width: 400px;
+    height: 500px;
+    border-radius: 1.75em;
+    margin-left: 20px;
+    box-shadow: 5px 5px 5px 5px rgb(27, 21, 21);
+    transform: rotateX(70deg);
+  }
+
+.pokeCardsInDeck{
+  transform: rotateX(0deg);
+  width: 250px;
+  height: 350px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.pokeAddCard{
+  margin-top: -324px;
+  margin-left: 150px;
+}
+.pokeDeckBoard{
+  min-height:600px;
+  padding: 10px;
+}
+
+.poke3d{
+    width: 400px;
+    height: 100px;
+    margin-left: 20px;
+    position: absolute;
+    z-index: 1;
+}
+
+.pokeView{
+  margin-top: -30px;
+}
+
+@keyframes flight {
+
+    0%,100%{ transform:translate(0); }
+    50%{ transform:translateY(-20px) ;  }
+  }
+
+.pokeImg3d{
+    filter:drop-shadow(0 30px 20px rgb(114, 226, 230));
+    animation:flight 1s ease-in-out infinite;
+}
+
+.textwater{
+  background: #6890F0;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #98D8D8;
+    border-bottom-color: #807870;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textfire{
+  background: #F08030;
+  border-style: solid none;
+  border-width: 1px;
+  border-top-color: #F8D030;
+  border-bottom-color: #C03028;
+  border-radius: 5px;
+  padding: 0.15em;
+}
+.textfairy{
+  background: #F0B6BC;
+  border-style: solid none;
+  border-width: 1px;
+  border-top-color: #F5CAD1;
+  border-bottom-color: #905F63;
+  border-radius: 5px;
+  padding: 0.15em;}
+.textgrass{
+  background: #78C850;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #C0F860;
+    border-bottom-color: #588040;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textbug{
+  background: #A8B820;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #D8E030;
+    border-bottom-color: #A8B820;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textnormal{
+  background: #A8A878;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #D8D8D0;
+    border-bottom-color: #705848;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textflying{
+  background: #A890F0;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #C8C0F8;
+    border-bottom-color: #705898;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textpoison{
+  background: #A040A0;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #D880B8;
+    border-bottom-color: #483850;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textelectric{
+  background: #F8D030;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #F8F878;
+    border-bottom-color: #B8A038;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textground{
+  background: #E0C068;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #F8F878;
+    border-bottom-color: #886830;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textfighting{
+  background: #C03028;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #F08030;
+    border-bottom-color: #484038;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textpsychic{
+  background: #F85888;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #F8C0B0;
+    border-bottom-color: #789010;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textdragon{
+  background: #7038F8;
+  border-style: solid none;
+  border-width: 1px;
+  border-top-color: #B8A0F8;
+  border-bottom-color: #483890;
+  border-radius: 5px;
+  padding: 0.15em;}
+.textrock{
+  background: #B8A038;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #E0C068;
+    border-bottom-color: #886830;
+    border-radius: 5px;
+    padding: 0.15em;
+}
+.textice{
+  background: #98D8D8;
+  border-style: solid none;
+  border-width: 1px;
+  border-top-color: #D0F8E8;
+  border-bottom-color: #9090A0;
+  border-radius: 5px;
+  padding: 0.15em;}
+.textghost{
+  background: #705898;
+  border-style: solid none;
+  border-width: 1px;
+  border-top-color: #A890F0;
+  border-bottom-color: #483850;
+  border-radius: 5px;
+  padding: 0.15em;}
+  
+.textdark{
+  background: #705848;
+  border-style: solid none;
+  border-width: 1px;
+  border-top-color: #A8A878;
+  border-bottom-color: #484038;
+  border-radius: 5px;
+  padding: 0.15em;
+}
+.textsteel{
+    background: #B8B8D0;
+    border-style: solid none;
+    border-width: 1px;
+    border-top-color: #D8D8C0;
+    border-bottom-color: #807870;
+    border-radius: 5px;
+    padding: 0.15em;
 }
