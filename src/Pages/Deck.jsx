@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getCards, getDecks, saveDeck } from '../utils'
+import { getCards, getDecks, removeDeck, saveDeck } from '../utils'
 import RenderCard from '../Components/RenderCard';
 import Header from '../Components/Header';
 import RenderPokemon from '../Components/RenderPokemon';
@@ -99,6 +99,16 @@ export default class Deck extends Component {
             deck:newDeck
         })
     }
+    removeDeck = ({target})=>{
+        const {deck} =this.state
+        const deckSelected = deck[target.value]
+        removeDeck(deckSelected);
+        const newDeck = getDecks();
+        console.log(deckSelected)
+        this.setState({
+            deck:newDeck
+        })
+    }
   render() {
     const {cards,focus,onBoard,deck,onCreation,deckSelected,deckName} = this.state
     return (
@@ -113,9 +123,11 @@ export default class Deck extends Component {
             <Header />
             {!onCreation? <div className='flex justify-around flex-wrap'>
             {deck.map((e,i)=>(
-                <div >
+                <div key={`${e.id}${i}`}>
                     <RenderDeck deck={e}/>
-                    <button value={i} onClick={this.creationDeck} className='text-center w-48 ml-14 pokeAddCard z-10 absolute '>Edit</button>
+                    <button value={i} onClick={this.creationDeck} className='text-center w-48 ml-20 z-10 absolute '>Edit</button>
+                    <button value={i} onClick={this.removeDeck} className='text-center w-48  z-10 absolute '>Remover</button>
+
                 </div>
             ))}
             <div className='pokeCard text-center border-4 border-red-900 bg-slate-400 pokeCardsInDeck flex items-center justify-center m-5'>

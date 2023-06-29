@@ -33,10 +33,15 @@ export const getCards = ()=>{
 
 export const saveDeck = (deck)=>{
     const oldDecks = JSON.parse(localStorage.getItem('deckPokemon'))||[];
-    console.log(oldDecks);
-    console.log(deck);
     const filter = oldDecks.filter((e)=>(e.id !== deck.id))
     const newDecks = [...filter,deck]
+    localStorage.setItem('deckPokemon',JSON.stringify(newDecks))
+}
+
+export const removeDeck = (deck)=>{
+    const oldDecks = JSON.parse(localStorage.getItem('deckPokemon'))||[];
+    const filter = oldDecks.filter((e)=>(e.id !== deck.id))
+    const newDecks = [...filter]
     localStorage.setItem('deckPokemon',JSON.stringify(newDecks))
 }
 
