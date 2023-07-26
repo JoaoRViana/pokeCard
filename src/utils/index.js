@@ -46,5 +46,13 @@ export const removeDeck = (deck)=>{
 }
 
 export const getDecks = ()=>{
-    return JSON.parse(localStorage.getItem('deckPokemon')) ||[];;
+    return JSON.parse(localStorage.getItem('deckPokemon')) ||[];
+}
+
+export const setDeckForPLay = (deck)=>{
+    localStorage.setItem('deckForPlay',JSON.stringify(deck))
+}
+
+export const getSetDeckForPlay = ()=>{
+    return JSON.parse(localStorage.getItem('deckForPlay'))||[];
 }

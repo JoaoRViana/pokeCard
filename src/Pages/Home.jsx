@@ -13,6 +13,7 @@ export default function Home(){
     return (
       <div className='flex justify-around '>
         <button onClick={redirectRandomizer}>Gerar Carta</button>
+        <button onClick={()=>{navigate('/play')}}>Play</button>
         <button onClick={redirectDeck}>Decks</button>
       </div>
     )
