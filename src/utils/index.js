@@ -1,3 +1,5 @@
+import { resitances, weakness } from "./Weakness";
+
 export async function getPokemon (id){
     const api = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
     const data = await api.json();
@@ -55,4 +57,33 @@ export const setDeckForPLay = (deck)=>{
 
 export const getSetDeckForPlay = ()=>{
     return JSON.parse(localStorage.getItem('deckForPlay'))||[];
+}
+
+export const enemyDamage = (enemy,playerPokemons)=>{
+    const playerPokemonsFiltred = playerPokemons.filter((e)=>(e!==false))
+        const damages = enemy.types.map((enemyType)=>{
+            return playerPokemonsFiltred.map((playerPokemon)=>{
+                const playerTypes = playerPokemon.types;
+                const weak = playerTypes.map((e)=>{
+                    if(weakness[e.type.name].includes(enemyType.type.name)){
+                        return 1
+                    } return false
+                }).filter((e)=>(e!==false))
+                const resis = playerTypes.map((e)=>{
+                    if(resitances[e.type.name].includes(enemyType.type.name)){
+                        return 1
+                    } return false
+                }).filter((e)=>(e!==false))
+                return {playerPokemon:playerPokemon.name,pokemon:`playerPokemon${playerPokemon.pokeNum}`,attack:Math.floor((enemy.attack)*(((weak.length >0?(weak.length)*2:1))/(resis.length >0?(resis.length)*2:1))),type:enemyType}
+            })
+    })
+    let bestDamage = {attack:1}
+    damages.forEach((e)=>{
+        e.forEach((e)=>{
+            if(+e.attack > +bestDamage.attack){
+                bestDamage = e
+            }
+        })
+    })
+    return bestDamage
 }

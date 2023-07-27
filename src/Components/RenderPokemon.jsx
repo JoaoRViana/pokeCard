@@ -4,7 +4,7 @@ export default class RenderPokemon extends Component {
   render() {
     const {pokemon} = this.props
     return (
-        <div >
+        <div>
             <div className='poke3d'>
             <div className='flex justify-evenly styledText absolute w-full  mt-6'>
                 <h3 >Attack: {pokemon.attack}</h3>

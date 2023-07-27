@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
-import { getSetDeckForPlay } from '../utils'
+import { enemyDamage, getSetDeckForPlay } from '../utils'
 import RenderCard from '../Components/RenderCard'
 import RenderPokemon from '../Components/RenderPokemon'
+import RandomPokemon from '../Pages/RandomPokemon'
+import { genPokemon,getPokemon } from '../utils'
+import { weakness,resitances } from '../utils/Weakness'
 
 export default class SinglePlayer extends Component {
     state = {
@@ -9,11 +12,21 @@ export default class SinglePlayer extends Component {
         allCards:[],
         cardsOnHand:[],
         selectedCardOnHand:'',
-        playerPokemon1:false,
-        playerPokemon2:false,
+        playerPokemon1:{attacked:false,pokeNum:1},
+        playerPokemon2:{attacked:false,pokeNum:2},
+        enemyPokemon1:'',
+        enemyPokemon2:'',
+        attackMode:false,
+        attackType:'',
+        pokemonAttacker:{},
+        pokemonNumber:'',
+        enemyCards:0,
+        win:false,
     }
     componentDidMount(){
         this.getPlayerDeck();
+        this.getEnemyPokemon('enemyPokemon1')
+        this.getEnemyPokemon('enemyPokemon2')
     }
     getPlayerDeck = ()=>{
         const deck  = getSetDeckForPlay();
@@ -57,20 +70,106 @@ export default class SinglePlayer extends Component {
         alert('no have more cards')
       }
     }
-    summonPokemon = (number) =>{
+    summonPokemon = (pokemon) =>{
       const {selectedCardOnHand,cardsOnHand} = this.state;
       const selecteds = cardsOnHand.filter((e)=>(e.name !==selectedCardOnHand.name))
-      console.log('a')
       this.setState({
-        [`playerPokemon${number}`] :selectedCardOnHand,
+        [pokemon] :{...selectedCardOnHand,...this.state[pokemon],attacked:false},
         cardsOnHand:selecteds,
         selectedCardOnHand:false,
       })
     }
+    attack = (pokemon)=>{
+      if(!this.state[pokemon].attacked){
+        this.setState({
+          pokemonAttacker:this.state[pokemon],
+          pokemonNumber:pokemon,
+          attackMode:true,
+        })
+      }
+    }
+    getEnemyPokemon = async(enemy)=>{
+      const {enemyCards} = this.state
+      let randomNumber  = Math.round((Math.random()*(251- 1)+1))
+      const pokemon = await genPokemon(await getPokemon(randomNumber))
+      this.setState({
+        [enemy]:pokemon,
+        enemyCards: enemyCards + 1,
+      })
+    }
+
+    hitEnemy = (enemy)=>{
+      const {attackType,pokemonAttacker,pokemonNumber} =this.state
+      const enemyTypes = this.state[enemy].types;
+      const weak = enemyTypes.map((e)=>{
+        if(weakness[e.type.name].includes(attackType)){
+          return 1
+        }return false
+      }).filter((e)=>(e !==false))
+      const resis = enemyTypes.map((e)=>{
+        if(resitances[e.type.name].includes(attackType)){
+          return 1
+        }return false
+      }).filter((e)=>(e !==false))
+      this.setState({
+        [enemy]:{...this.state[enemy],hp: Math.floor(this.state[enemy].hp -(pokemonAttacker.attack)*(((weak.length >0?(weak.length)*2:1))/(resis.length >0?(resis.length)*2:1)) )},
+        attackMode:false,
+        attackType:'',
+        [pokemonNumber]:{...this.state[pokemonNumber],attacked:true}
+      },()=>{
+        const {enemyCards,enemyPokemon1,enemyPokemon2} = this.state
+        const enemyhp = this.state[enemy].hp;
+        if(enemyhp <1 && enemyCards <3){
+          this.getEnemyPokemon(enemy)
+        }if((enemyPokemon1.hp < 1 || enemyPokemon1.hp === undefined) && (enemyPokemon2.hp < 1 || enemyPokemon1.hp === undefined) && enemyCards >2){
+          this.setState({
+            win:true
+          })
+        }
+      })
+    }
+    hitPlayer = (enemy)=>{
+      const {playerPokemon1,playerPokemon2} = this.state;
+      const damage = enemyDamage(enemy,[playerPokemon1.hp>1?playerPokemon1:false,playerPokemon2.hp>1?playerPokemon2:false]);
+      const playerPokemon = damage.pokemon
+      if((this.state[playerPokemon].hp - damage.attack) <1){
+        this.setState({
+          [playerPokemon]:{attacked:false,pokeNum:damage.pokeNum}
+        },()=>{
+          this.setState({
+            playerPokemon1:{...this.state.playerPokemon1,attacked:false},
+            playerPokemon2:{...this.state.playerPokemon2,attacked:false},
+          })
+        })
+      }else{
+        this.setState({
+          [playerPokemon]:{...this.state[playerPokemon],hp:(this.state[playerPokemon].hp - damage.attack)}
+        },()=>{
+          this.setState({
+            playerPokemon1:{...this.state.playerPokemon1,attacked:false},
+            playerPokemon2:{...this.state.playerPokemon2,attacked:false},
+          })
+        })
+      }
+      
+    }
+    passTurn = async()=>{
+      const {enemyPokemon1,enemyPokemon2}=this.state;
+      if(enemyPokemon1.hp >1){
+        this.hitPlayer(enemyPokemon1)
+      }if(enemyPokemon2.hp>1){
+        this.hitPlayer(enemyPokemon2)
+      }
+    }
   render() {
-    const {cardsOnHand,playerPokemon1,playerPokemon2}= this.state
+    const {cardsOnHand,playerPokemon1,playerPokemon2,enemyPokemon1,enemyPokemon2,attackMode,pokemonAttacker,win}= this.state
     return (
       <div>
+        {win?<RandomPokemon />:<div>{attackMode?<div>{pokemonAttacker.types.map((e)=>(<div key={`${e.type.name}button`}><button onClick={()=>{
+          this.setState({
+            attackType:e.type.name,
+          })
+        }}>{e.type.name}</button></div>))}</div>:''}
         <div className='flex-wrap flex'>
         {cardsOnHand.map((e,i)=>(
             <div key={`${e.name}${i}`} id={`${e.name}${i}`}>
@@ -96,8 +195,26 @@ export default class SinglePlayer extends Component {
         ))}
         </div>
         <button onClick={this.buyCard}>Buy</button>
-        {playerPokemon1?<button><RenderPokemon pokemon={playerPokemon1}/></button>:<button onClick={()=>{this.summonPokemon(1)}}>[   ]</button>}
-        {playerPokemon2?<button><RenderPokemon pokemon={playerPokemon2}/></button>:<button onClick={()=>{this.summonPokemon(2)}}>[   ]</button>}
+        <div>
+        {playerPokemon1.hp>0 && playerPokemon1.hp !== undefined?<button id={'playerPokemon1'}
+          onClick={()=>{this.attack('playerPokemon1')}}
+        ><RenderPokemon pokemon={playerPokemon1}/></button>:<button onClick={()=>{this.summonPokemon('playerPokemon1')}}>[   ]</button>}
+        {playerPokemon2.hp>0 && playerPokemon2.hp !== undefined?<button 
+            onClick={()=>{this.attack('playerPokemon2')}}
+         id={'playerPokemon2'}><RenderPokemon pokemon={playerPokemon2}/></button>:<button onClick={()=>{this.summonPokemon('playerPokemon2')}}>[   ]</button>}
+        </div>
+        <button onClick={this.passTurn}>Pass</button>
+        <div>
+          <h1>Enemies</h1>
+        {enemyPokemon1.hp>0?<button onClick={()=>{
+          if(attackMode){ this.hitEnemy('enemyPokemon1')
+        }
+        }} id={'enemyPokemon1'}><RenderPokemon pokemon={enemyPokemon1}/></button>:'[   ]'}
+        {enemyPokemon2.hp>0?<button onClick={()=>{
+          if(attackMode){ this.hitEnemy('enemyPokemon2')
+        }
+        }} id={'enemyPokemon1'}><RenderPokemon pokemon={enemyPokemon2}/></button>:'[   ]'}
+        </div></div>}
       </div>
     )
   }
