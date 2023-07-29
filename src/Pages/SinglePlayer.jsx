@@ -49,17 +49,12 @@ export default class SinglePlayer extends Component {
     }
     buyCard = ()=>{
       const {allCards,cardsOnHand} = this.state
-      if(allCards.length >0){
         this.setState({
           cardsOnHand:[...cardsOnHand,allCards[0]],
           buy:true,
         },()=>{
           allCards.shift()
         })
-      }
-      else{
-        alert('no have more cards')
-      }
     }
     summonPokemon = (pokemon) =>{
       const {selectedCardOnHand,cardsOnHand} = this.state;
@@ -104,14 +99,12 @@ export default class SinglePlayer extends Component {
       })
     }
     hitEffect=(enemy)=>{
-      const element = document.querySelector(`#${enemy.name}`)
+      const element = document.querySelector(`#${enemy}`)
       element.style.filter = 'opacity(0.7) drop-shadow(0 0 0 red) drop-shadow(0 0 0 red)'
       element.style.animation ='tilt 0.5s ease-in-out infinite'
-      console.log(enemy);
       setTimeout(()=>{
         try {
-          const element = document.querySelector(`#${enemy.name}`)
-          element.style.filter = ''
+           element.style.filter = ''
           element.style.animation = ''
         } catch (error) {
           
@@ -148,6 +141,8 @@ export default class SinglePlayer extends Component {
       if(playerPokemon1.hp !==undefined || playerPokemon2.hp !== undefined){
         const damage = enemyDamage(enemy,[playerPokemon1.hp>1?playerPokemon1:false,playerPokemon2.hp>1?playerPokemon2:false]);
         const playerPokemon = damage.pokemon
+        const element = document.querySelector(`#playerPokemon${damage.playerPokemon}`)
+        element.style.filter = ''
         if((this.state[playerPokemon].hp - damage.attack) <1){
           this.setState({
             [playerPokemon]:{attacked:false,pokeNum:damage.pokeNum}
@@ -162,21 +157,26 @@ export default class SinglePlayer extends Component {
             })
           })
         }
-      }
+        this.hitEffect(`playerPokemon${damage.playerPokemon}`)
+      }      
     }
     passTurn = async()=>{
       const {enemyPokemon1,enemyPokemon2}=this.state;
       if(enemyPokemon1.hp >1){
         this.hitPlayer(enemyPokemon1)
-      }if(enemyPokemon2.hp>1){
-        this.hitPlayer(enemyPokemon2)
       }
+      setTimeout(() => {
+        if(enemyPokemon2.hp>1){
+          this.hitPlayer(enemyPokemon2)
+        }
+      }, 600);
+      
       this.setState({
         buy:false,
       })
     }
   render() {
-    const {cardsOnHand,playerPokemon1,playerPokemon2,enemyPokemon1,enemyPokemon2,attackMode,pokemonAttacker,win,attackType,buy}= this.state
+    const {cardsOnHand,playerPokemon1,playerPokemon2,enemyPokemon1,enemyPokemon2,attackMode,pokemonAttacker,win,attackType,buy,allCards}= this.state
     return (
       <div className='bg-zinc-300 py-5'>
         {win?<RandomPokemon />:
@@ -236,7 +236,7 @@ export default class SinglePlayer extends Component {
         ))}
         </div>
         <div className=' flex justify-center float-right w-20 flex-wrap buttonsContainer'>
-          <button onClick={this.buyCard} disabled={buy} className='mr-3 w-20 z-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed'>Buy</button>
+          <button onClick={this.buyCard} disabled={buy || allCards.length<1} className='mr-3 w-20 z-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed'>Buy</button>
           <button onClick={this.passTurn} className='mr-3 w-20 mt-2 z-40 bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded'>Pass</button>
         </div>
 
