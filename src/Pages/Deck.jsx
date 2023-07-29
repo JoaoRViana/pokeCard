@@ -14,6 +14,7 @@ export default class Deck extends Component {
         deckIndex:0,
         onBoard:{},
         deck:[],
+        cardsFiltred:[],
         deckName:'',
         edit:false,
     }
@@ -23,6 +24,8 @@ export default class Deck extends Component {
         this.setState({
             cards,
             deck,
+        },()=>{
+            this.filtredCards();
         })
     }
     exitFocus= ()=>{
@@ -33,12 +36,13 @@ export default class Deck extends Component {
     componentDidMount(){
         this.setCards()
     }
-    cardOnBoard = ({target})=>{
+    cardOnBoard = (pokemon)=>{
         const { cards } =this.state
+        const card = cards.find((e)=>e.name ===pokemon.name && e.attack === pokemon.attack && e.hp === pokemon.hp)
         window.scrollTo(0, 0);
         this.setState({
             focus:true,
-            onBoard:cards[target.value]
+            onBoard:card,
         })
     }
     creationDeck = ({target})=>{
@@ -58,19 +62,23 @@ export default class Deck extends Component {
             deckIndex,
         })
     }
-    addCardOnDeck = ({target}) =>{
-        const{deckSelected,cards} =this.state
-        const newCards = [...deckSelected,cards[target.value]]
+    addCardOnDeck = (pokemon) =>{
+        const{deckSelected,cards} =this.state;
+        const card = cards.find((e)=>e.name ===pokemon.name && e.attack === pokemon.attack && e.hp === pokemon.hp)
+        const newCards = [...deckSelected,card]
         this.setState({
             deckSelected: newCards,
+        },()=>{
+            this.filtredCards()
         })
     }
     removeCardOnDeck = ({target}) =>{
         const{deckSelected} =this.state
         const newCards = deckSelected.filter((_e,i)=>(i !== +target.value))
-        console.log(newCards)
         this.setState({
             deckSelected: newCards,
+        },()=>{
+            this.filtredCards();
         })
     }
     deckName = ({target})=>{
@@ -104,13 +112,22 @@ export default class Deck extends Component {
         const deckSelected = deck[target.value]
         removeDeck(deckSelected);
         const newDeck = getDecks();
-        console.log(deckSelected)
         this.setState({
             deck:newDeck
         })
     }
+    filtredCards = ()=>{
+        const {cards,deckSelected} =this.state
+        let filtred = cards
+        if(deckSelected.length >0){
+            filtred = cards.map((e)=>(deckSelected.includes(e)?false:e)).filter((e)=>e!==false)
+        }
+        this.setState({
+            cardsFiltred:filtred
+        })
+    }
   render() {
-    const {cards,focus,onBoard,deck,onCreation,deckSelected,deckName} = this.state
+    const {focus,onBoard,deck,onCreation,deckSelected,deckName,cardsFiltred} = this.state
     return (
         <div>
             {focus?<div className='w-full flex justify-end mt-3 absolute z-10'><button onClick={this.exitFocus} className='mr-10 '>X</button></div>
@@ -143,17 +160,17 @@ export default class Deck extends Component {
             <button className='w-full bg-sky-900' onClick={this.addDeck}>Finalizar</button>
         </div>:''}
             {deckSelected.map((e,i)=>(
-                <div className='my-5'>
+                <div className='my-5' key={`${e.name}Deck`}>
                  <RenderCard pokemon={e}/>
                  <button value={i} onClick={this.removeCardOnDeck} className='text-center w-48 ml-14 pokeAddCard z-10 absolute '>-</button>
                 </div>
             ))}
         </div>
         {deckSelected.length ===6?'':<div className='w-2/3 flex justify-around flex-wrap h-fit'>
-        {cards.map((e,i)=>(
-                <div key={`${e.name}${i}`} className='m-14'><RenderCard pokemon={e}/>
-                <button value={i} onClick={this.addCardOnDeck} className='text-center w-48 ml-14 pokeAddCard z-10 absolute '>+</button>
-                <button value={i} onClick={this.cardOnBoard} className='text-center w-48 ml-14 pokeView z-10 absolute '>view</button></div>
+        {cardsFiltred.map((e,i)=>(
+                <div key={`${e.name}${i}Cards`} className='m-14'><RenderCard pokemon={e}/>
+                <button  onClick={()=>{this.addCardOnDeck(e)}} className='text-center w-48 ml-14 pokeAddCard z-10 absolute '>+</button>
+                <button  onClick={()=>{this.cardOnBoard(e)}} className='text-center w-48 ml-14 pokeView z-10 absolute '>view</button></div>
                 
         ))}
         </div>}

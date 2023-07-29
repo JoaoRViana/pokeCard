@@ -162,11 +162,11 @@ export default class SinglePlayer extends Component {
     }
     passTurn = async()=>{
       const {enemyPokemon1,enemyPokemon2}=this.state;
-      if(enemyPokemon1.hp >1){
+      if(enemyPokemon1.hp >0){
         this.hitPlayer(enemyPokemon1)
       }
       setTimeout(() => {
-        if(enemyPokemon2.hp>1){
+        if(enemyPokemon2.hp>0){
           this.hitPlayer(enemyPokemon2)
         }
       }, 600);
@@ -211,6 +211,10 @@ export default class SinglePlayer extends Component {
         ><RenderPokemon pokemon={playerPokemon2}/></button>:<button onClick={()=>{this.summonPokemon('playerPokemon2')}}><div  className='pokeCard emptyCard'/></button>}
         </div>
           </div>
+          <div className=' flex justify-center float-right w-20 flex-wrap buttonsContainer'>
+          <button onClick={this.buyCard} disabled={buy || allCards.length<1} className='mr-3 w-20 z-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed'>Buy</button>
+          <button onClick={this.passTurn} className='mr-3 w-20 mt-2 z-40 bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded'>Pass</button>
+        </div>
         <div className='flex-wrap flex justify-center w-auto mx-auto'>
         {cardsOnHand.map((e,i)=>(
             <div key={`${e.name}${i}`} id={`${e.name}${i}`}>
@@ -231,15 +235,16 @@ export default class SinglePlayer extends Component {
                       }
                       const element = document.querySelector(`#${e.name}${i}`)
                       element.style.filter = 'drop-shadow(0 -30px 20px rgb(230, 30, 20))'
+                      if(selectedCardOnHand.name === e.name){
+                        element.style.filter = ''
+                        this.setState({
+                          selectedCardOnHand:''
+                        })
+                      }
               }} ><RenderCard pokemon={e}/></button>
             </div>
         ))}
         </div>
-        <div className=' flex justify-center float-right w-20 flex-wrap buttonsContainer'>
-          <button onClick={this.buyCard} disabled={buy || allCards.length<1} className='mr-3 w-20 z-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed'>Buy</button>
-          <button onClick={this.passTurn} className='mr-3 w-20 mt-2 z-40 bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded'>Pass</button>
-        </div>
-
 </div>}
       </div>
     )
