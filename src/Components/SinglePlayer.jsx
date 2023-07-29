@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { enemyDamage, getSetDeckForPlay, getWeakness } from '../utils'
-import RenderCard from '../Components/RenderCard'
-import RenderPokemon from '../Components/RenderPokemon'
+import RenderCard from './RenderCard'
+import RenderPokemon from './RenderPokemon'
 import RandomPokemon from '../Pages/RandomPokemon'
 import { shuffle } from '../utils'
 import { weakness,resitances } from '../utils/Weakness'
-import {red} from '../utils/trainers'
 
 export default class SinglePlayer extends Component {
     state = {
@@ -22,7 +21,7 @@ export default class SinglePlayer extends Component {
         pokemonAttacker:{},
         pokemonNumber:'',
         enemyCards:0,
-        enemyDeck:red,
+        enemyDeck:[],
         win:false,
         buy:false,
     }
@@ -31,9 +30,11 @@ export default class SinglePlayer extends Component {
 
     }
     getPlayerDeck = ()=>{
+      const {trainer} = this.props
         const deck  = getSetDeckForPlay();
         this.setState({
             deck,
+            enemyDeck:trainer.cards,
         },()=>{
           this.setRandomCards();
         })
@@ -182,9 +183,10 @@ export default class SinglePlayer extends Component {
     }
   render() {
     const {cardsOnHand,playerPokemon1,playerPokemon2,enemyPokemon1,enemyPokemon2,attackMode,pokemonAttacker,win,attackType,buy,allCards}= this.state
+    const {trainer} =this.props
     return (
       <div className='bg-zinc-300 py-5'>
-        {win?<RandomPokemon />:
+        {win?<RandomPokemon min={trainer.min} max={trainer.max}/>:
         <div>
           <div className='bg-slate-100 w-1/2 mx-auto shadow-md'>
           <div className='flex justify-around w-full mx-auto h-96 '>

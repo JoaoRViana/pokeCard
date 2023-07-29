@@ -4,8 +4,7 @@ import Home from './Pages/Home';
 import RandomPokemon from './Pages/RandomPokemon';
 import Deck from './Pages/Deck';
 import SetGame from './Pages/SetGame';
-import SinglePlayer from './Pages/SinglePlayer';
-
+import SinglePlayerMenu from './Pages/SinglePlayerMenu';
 function App() {
   return (
     <div>
@@ -14,7 +13,7 @@ function App() {
             <Route path='/random' element= {<RandomPokemon/>}/>
             <Route path ='/deck' element ={<Deck/>}/>
             <Route path ='/play' element={<SetGame/>}></Route>
-            <Route path ='/singlePlayer' element={<SinglePlayer/>}></Route>
+            <Route path ='/singlePlayer' element={<SinglePlayerMenu/>}></Route>
         </Routes>
     </div>
   );

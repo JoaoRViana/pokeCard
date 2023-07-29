@@ -1,4 +1,9 @@
-const red = [{
+import redImg from '../assets/redImg.jpg'
+
+const trainers =[{
+    name:'red',
+    image:redImg,
+    cards:[{
     attack: 93,
     hp: 383,
     name: "charizard",
@@ -42,8 +47,12 @@ const red = [{
         }
     ]
 }
-]
+],
+min:1,
+max:151,
+}]
+
 
 export {
-    red,
+    trainers,
 }

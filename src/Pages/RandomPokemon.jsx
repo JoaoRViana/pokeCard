@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { genPokemon, getPokemon, saveCard } from '../utils'
 import RenderPokemon from '../Components/RenderPokemon'
-import Header from '../Components/Header'
 
 export default class RandomPokemon extends Component {
     state = {
@@ -9,7 +8,8 @@ export default class RandomPokemon extends Component {
         arrayPokemons:[],
     }
     getRandomPokemon = async ()=>{
-        const randomNumber  = Math.round((Math.random()*251- 1)+1)
+        const {min,max} =this.props
+        const randomNumber  = Math.round((Math.random()*(max-min))+min)
         const pokemon = await genPokemon(await getPokemon(randomNumber))
         saveCard(pokemon);
         return pokemon
@@ -32,7 +32,6 @@ export default class RandomPokemon extends Component {
     const {pokemon,arrayPokemons} = this.state;
     return (
       <div>
-        <Header />
         <div className='flex justify-around flex-wrap mt-10'>
         {pokemon? arrayPokemons.map((e,i)=>(
             <div key={`${e.name}${i}`}>
