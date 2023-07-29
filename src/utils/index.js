@@ -59,21 +59,22 @@ export const getSetDeckForPlay = ()=>{
     return JSON.parse(localStorage.getItem('deckForPlay'))||[];
 }
 
+export const getWeakness =(advPokemon,mainPokemonType,arrayTypes)=>{
+    const weak = advPokemon.map((e)=>{
+        if(arrayTypes[e.type.name].includes(mainPokemonType.type.name)){
+            return 1
+        } return false
+    }).filter((e)=>(e!==false))
+    return weak
+}
+
 export const enemyDamage = (enemy,playerPokemons)=>{
     const playerPokemonsFiltred = playerPokemons.filter((e)=>(e!==false))
         const damages = enemy.types.map((enemyType)=>{
             return playerPokemonsFiltred.map((playerPokemon)=>{
                 const playerTypes = playerPokemon.types;
-                const weak = playerTypes.map((e)=>{
-                    if(weakness[e.type.name].includes(enemyType.type.name)){
-                        return 1
-                    } return false
-                }).filter((e)=>(e!==false))
-                const resis = playerTypes.map((e)=>{
-                    if(resitances[e.type.name].includes(enemyType.type.name)){
-                        return 1
-                    } return false
-                }).filter((e)=>(e!==false))
+                const weak = getWeakness(playerTypes,enemyType,weakness)
+                const resis =getWeakness(playerTypes,enemyType,resitances)
                 return {playerPokemon:playerPokemon.name,pokemon:`playerPokemon${playerPokemon.pokeNum}`,attack:Math.floor((enemy.attack)*(((weak.length >0?(weak.length)*2:1))/(resis.length >0?(resis.length)*2:1))),type:enemyType}
             })
     })
@@ -86,4 +87,14 @@ export const enemyDamage = (enemy,playerPokemons)=>{
         })
     })
     return bestDamage
+}
+export const shuffle = (array) => {
+  let currentIndex = array.length,  randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
 }

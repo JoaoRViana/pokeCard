@@ -10,7 +10,7 @@ export default class RenderPokemon extends Component {
                 <h3 >Attack: {pokemon.attack}</h3>
                 <h4 >Hp: {pokemon.hp}</h4>
             </div>
-            <img src={pokemon.spriteOnBoard} alt={pokemon.name} className='w-48  mt-10 ml-24 pokeImg3d'/>
+            <img src={pokemon.spriteOnBoard} alt={pokemon.name} className='w-48  mt-10 ml-16 pokeImg3d'/>
             </div>
         <div className={`pokeCard text-center border-4 border-red-900 bg-slate-400`}>
             <h1 className='my-5 text-2xl styledText'>{pokemon.name}</h1>

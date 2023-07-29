@@ -10,14 +10,17 @@
     text-shadow: -0.01em -0.01em 0.01em #000;
 }
 .pokeCard{
-    width: 400px;
+    width: 300px;
     height: 500px;
     border-radius: 1.75em;
     margin-left: 20px;
     box-shadow: 5px 5px 5px 5px rgb(27, 21, 21);
     transform: rotateX(70deg);
   }
-
+.emptyCard{
+  box-shadow: inset 0 2px 4px 0 rgb(0 0 0 /0.5);
+  background-color: rgba(0, 0, 0, 0.2);
+}
 .pokeCardsInDeck{
   transform: rotateX(0deg);
   width: 250px;
@@ -34,9 +37,9 @@
 }
 
 .poke3d{
-    width: 400px;
+    width: 300px;
     height: 100px;
-    margin-left: 20px;
+    margin-left: 10px;
     position: absolute;
     z-index: 1;
 }
@@ -50,7 +53,17 @@
     0%,100%{ transform:translate(0); }
     50%{ transform:translateY(-20px) ;  }
   }
-
+@keyframes tilt{
+  0% {
+    transform: skewY(5deg);
+  }
+  50% {
+    transform: skewY(-5deg);
+  }
+  100% {
+    transform: skewY(5deg);
+  }
+}
 .pokeImg3d{
     filter:drop-shadow(0 30px 20px rgb(114, 226, 230));
     animation:flight 1s ease-in-out infinite;
@@ -146,7 +159,7 @@
     padding: 0.15em;
 }
 .textfighting{
-  background: #C03028;
+    background: #C03028;
     border-style: solid none;
     border-width: 1px;
     border-top-color: #F08030;
@@ -214,4 +227,7 @@
     border-bottom-color: #807870;
     border-radius: 5px;
     padding: 0.15em;
+}
+.buttonsContainer{
+  margin-top: -200px;
 }

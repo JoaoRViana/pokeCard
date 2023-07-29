@@ -8,7 +8,7 @@ import SinglePlayer from './Pages/SinglePlayer';
 
 function App() {
   return (
-    <div >
+    <div  className='bg-zinc-300'>
             <Routes>
             <Route exact path='/' element= {<Home/>}/>
             <Route path='/random' element= {<RandomPokemon/>}/>
