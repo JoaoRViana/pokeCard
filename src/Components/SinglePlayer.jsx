@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { enemyDamage, getSetDeckForPlay, getWeakness } from '../utils'
 import RenderCard from './RenderCard'
 import RenderPokemon from './RenderPokemon'
-import RandomPokemon from '../Pages/RandomPokemon'
+import RandomPokemon from '../Pages/RewardsPokemon'
 import { shuffle } from '../utils'
 import { weakness,resitances } from '../utils/Weakness'
+import { redirect } from 'react-router-dom'
 
 export default class SinglePlayer extends Component {
     state = {
@@ -24,6 +25,7 @@ export default class SinglePlayer extends Component {
         enemyDeck:[],
         win:false,
         buy:false,
+        loose:false,
     }
     componentDidMount(){
         this.getPlayerDeck();
@@ -179,13 +181,27 @@ export default class SinglePlayer extends Component {
       
       this.setState({
         buy:false,
+      },()=>{
+        const {playerPokemon1,playerPokemon2,cardsOnHand} = this.state;
+        console.log(this.state.loose)
+        if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cardsOnHand.length <1){
+          this.setState({
+            loose:true,
+          })
+        }
       })
     }
+    looseBattle = ()=>{
+      window.location.replace('/loose')
+    }
   render() {
-    const {cardsOnHand,playerPokemon1,playerPokemon2,enemyPokemon1,enemyPokemon2,attackMode,pokemonAttacker,win,attackType,buy,allCards}= this.state
+    const {cardsOnHand,playerPokemon1,playerPokemon2,enemyPokemon1,enemyPokemon2,attackMode,pokemonAttacker,win,attackType,buy,allCards,loose}= this.state
     const {trainer} =this.props
     return (
       <div className='bg-zinc-300 py-5'>
+        <div>
+        {loose?this.looseBattle():''}
+        </div>
         {win?<RandomPokemon min={trainer.min} max={trainer.max}/>:
         <div>
           <div className='bg-slate-100 w-1/2 mx-auto shadow-md'>

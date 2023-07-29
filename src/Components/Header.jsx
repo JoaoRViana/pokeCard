@@ -8,8 +8,8 @@ function Header(){
         navigate('/')
     }
     return(
-        <div>
-            <button onClick={backHome}>Home</button>
+        <div className=" text-center mb-5">
+            <button onClick={backHome} className="text-2xl styledText text-center ">Home</button>
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { genPokemon, getPokemon, saveCard } from '../utils'
 import RenderPokemon from '../Components/RenderPokemon'
+import Header from '../Components/Header'
 
 export default class RandomPokemon extends Component {
     state = {
@@ -33,6 +34,9 @@ export default class RandomPokemon extends Component {
     return (
       <div>
         <div className='flex justify-around flex-wrap mt-10'>
+            <div className='w-full'>
+                <Header/>
+            </div>
         {pokemon? arrayPokemons.map((e,i)=>(
             <div key={`${e.name}${i}`}>
                 <RenderPokemon pokemon={e}/>

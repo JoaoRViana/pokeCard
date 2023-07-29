@@ -49,6 +49,11 @@ const trainers =[{
 ],
 min:1,
 max:151,
+},{
+    name:'Random',
+    image:'bg-[url(./assets/randomTrainer.jpg)]',
+    min:1,
+    max:649,
 }]
 
 
