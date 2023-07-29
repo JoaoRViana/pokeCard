@@ -3,8 +3,9 @@ import { enemyDamage, getSetDeckForPlay, getWeakness } from '../utils'
 import RenderCard from '../Components/RenderCard'
 import RenderPokemon from '../Components/RenderPokemon'
 import RandomPokemon from '../Pages/RandomPokemon'
-import { genPokemon,getPokemon,shuffle } from '../utils'
+import { shuffle } from '../utils'
 import { weakness,resitances } from '../utils/Weakness'
+import {red} from '../utils/trainers'
 
 export default class SinglePlayer extends Component {
     state = {
@@ -21,13 +22,13 @@ export default class SinglePlayer extends Component {
         pokemonAttacker:{},
         pokemonNumber:'',
         enemyCards:0,
+        enemyDeck:red,
         win:false,
         buy:false,
     }
     componentDidMount(){
         this.getPlayerDeck();
-        this.getEnemyPokemon('enemyPokemon1')
-        this.getEnemyPokemon('enemyPokemon2')
+
     }
     getPlayerDeck = ()=>{
         const deck  = getSetDeckForPlay();
@@ -38,13 +39,18 @@ export default class SinglePlayer extends Component {
         })
     }
     setRandomCards = ()=>{
-      const {deck:{cards}}= this.state;
+      const {deck:{cards},enemyDeck}= this.state;
       const allCards = shuffle(cards)
-      const cardsOnHand = [allCards[0],allCards[1],allCards[2],allCards[3]]
+      const enemyCards = shuffle(enemyDeck)
+      const cardsOnHand = [allCards[0],allCards[1],allCards[2]]
       cardsOnHand.forEach((_e)=>(allCards.shift()))
       this.setState({
         allCards,
         cardsOnHand,
+        enemyDeck:enemyCards
+      },async ()=>{
+        await this.getEnemyPokemon('enemyPokemon1')
+        await this.getEnemyPokemon('enemyPokemon2')
       })
     }
     buyCard = ()=>{
@@ -90,9 +96,8 @@ export default class SinglePlayer extends Component {
     }
 
     getEnemyPokemon = async(enemy)=>{
-      const {enemyCards} = this.state
-      let randomNumber  = Math.round((Math.random()*(251- 1)+1))
-      const pokemon = await genPokemon(await getPokemon(randomNumber))
+      const {enemyCards,enemyDeck} = this.state
+      const pokemon = enemyDeck[enemyCards]
       this.setState({
         [enemy]:pokemon,
         enemyCards: enemyCards + 1,
@@ -125,11 +130,11 @@ export default class SinglePlayer extends Component {
         attackType:'',
         [pokemonNumber]:{...this.state[pokemonNumber],attacked:true}
       },()=>{
-        const {enemyCards,enemyPokemon1,enemyPokemon2} = this.state
+        const {enemyCards,enemyPokemon1,enemyPokemon2,enemyDeck} = this.state
         const enemyhp = this.state[enemy].hp;
-        if(enemyhp <1 && enemyCards <3){
+        if(enemyhp <1 && enemyDeck.length > enemyCards){
           this.getEnemyPokemon(enemy)
-        }if((enemyPokemon1.hp < 1 || enemyPokemon1.hp === undefined) && (enemyPokemon2.hp < 1 || enemyPokemon1.hp === undefined) && enemyCards >2){
+        }if((enemyPokemon1.hp < 1 || enemyPokemon1.hp === undefined) && (enemyPokemon2.hp < 1 || enemyPokemon1.hp === undefined) && enemyDeck.length <enemyCards+1){
           this.setState({
             win:true
           })
