@@ -1,8 +1,7 @@
-import redImg from '../assets/redImg.jpg'
 
 const trainers =[{
-    name:'red',
-    image:redImg,
+    name:'Red',
+    image:'bg-[url(./assets/redImg.jpg)]',
     cards:[{
     attack: 93,
     hp: 383,
