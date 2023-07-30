@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import RenderDeck from '../Components/RenderDeck';
-import { getDecks,setDeckForPLay,genPokemon,getPokemon } from '../utils'
+import { getDecks,setDeckForPLay,genPokemon,getPokemon,getStarterDeck } from '../utils'
 import {trainers} from '../utils/trainers'
 import SinglePlayer from '../Components/SinglePlayer';
 import Header from '../Components/Header';
@@ -17,7 +17,12 @@ export default class SinglePlayerMenu extends Component {
         this.getAllDecks();
     }
     getAllDecks =  ()=>{
-        const decks = getDecks();
+        let decks = getDecks();
+        const starterDeck = decks.filter((e)=>(e.name === 'Starter Deck'));
+        if(starterDeck.length===0){
+          const starter = getStarterDeck(decks.length)
+          decks = [...decks,starter]
+        }
         this.setState({
             decks,
         })
@@ -31,6 +36,7 @@ export default class SinglePlayerMenu extends Component {
           cards.push(pokemon)
         }
         trainer.cards = cards
+        console.log(cards)
       }
         this.setState({trainer,trainerSelected:true})
     }

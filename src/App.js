@@ -8,7 +8,7 @@ import SinglePlayerMenu from './Pages/SinglePlayerMenu';
 import LooseBattle from './Pages/LooseBattle';
 function App() {
   return (
-    <div>
+    <div className='bg-slate-400 min-h-screen h-full'>
           <Routes>
             <Route exact path='/' element= {<Home/>}/>
             <Route path='/random' element= {<RandomPokemon/>}/>

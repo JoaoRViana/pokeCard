@@ -5,7 +5,6 @@ import RenderPokemon from './RenderPokemon'
 import RandomPokemon from '../Pages/RewardsPokemon'
 import { shuffle } from '../utils'
 import { weakness,resitances } from '../utils/Weakness'
-import { redirect } from 'react-router-dom'
 
 export default class SinglePlayer extends Component {
     state = {
@@ -183,7 +182,6 @@ export default class SinglePlayer extends Component {
         buy:false,
       },()=>{
         const {playerPokemon1,playerPokemon2,cardsOnHand} = this.state;
-        console.log(this.state.loose)
         if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cardsOnHand.length <1){
           this.setState({
             loose:true,
