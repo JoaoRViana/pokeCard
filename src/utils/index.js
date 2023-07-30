@@ -78,6 +78,7 @@ export const enemyDamage = (enemy,playerPokemons)=>{
                 return {playerPokemon:playerPokemon.name,pokemon:`playerPokemon${playerPokemon.pokeNum}`,attack:Math.floor((enemy.attack)*(((weak.length >0?(weak.length)*2:1))/(resis.length >0?(resis.length)*2:1))),type:enemyType}
             })
     })
+    console.log(damages)
     let bestDamage = {attack:1}
     damages.forEach((e)=>{
         e.forEach((e)=>{

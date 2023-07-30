@@ -36,7 +36,6 @@ export default class SinglePlayerMenu extends Component {
           cards.push(pokemon)
         }
         trainer.cards = cards
-        console.log(cards)
       }
         this.setState({trainer,trainerSelected:true})
     }

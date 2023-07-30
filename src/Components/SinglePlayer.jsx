@@ -143,12 +143,29 @@ export default class SinglePlayer extends Component {
         }
       })
     }
+    enemyTurn = ()=>{
+      const {enemyPokemon1,enemyPokemon2} = this.state;
+      setTimeout(()=>{
+        if(enemyPokemon1.hp >0){
+          this.hitPlayer(enemyPokemon1)
+        }
+      },200)
+      setTimeout(() => {
+        if(enemyPokemon2.hp>0){
+          this.hitPlayer(enemyPokemon2)
+        }
+      }, 600);
+      this.setState({
+        buy:false,
+      })
+    }
     hitPlayer = (enemy)=>{
       const {playerPokemon1,playerPokemon2} = this.state;
       if(playerPokemon1.hp !==undefined || playerPokemon2.hp !== undefined){
         const damage = enemyDamage(enemy,[playerPokemon1.hp>1?playerPokemon1:false,playerPokemon2.hp>1?playerPokemon2:false]);
         const playerPokemon = damage.pokemon
         const element = document.querySelector(`#playerPokemon${damage.playerPokemon}`)
+        console.log(playerPokemon1)
         element.style.filter = ''
         if((this.state[playerPokemon].hp - damage.attack) <1){
           this.setState({
@@ -168,26 +185,26 @@ export default class SinglePlayer extends Component {
       }      
     }
     passTurn = async()=>{
-      const {enemyPokemon1,enemyPokemon2}=this.state;
-      if(enemyPokemon1.hp >0){
-        this.hitPlayer(enemyPokemon1)
+      const {playerPokemon1,playerPokemon2,cardsOnHand}=this.state;
+      if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cardsOnHand.length <1){
+        this.setState({
+          loose:true,
+        })
       }
-      setTimeout(() => {
-        if(enemyPokemon2.hp>0){
-          this.hitPlayer(enemyPokemon2)
-        }
-      }, 600);
-      
-      this.setState({
-        buy:false,
-      },()=>{
-        const {playerPokemon1,playerPokemon2,cardsOnHand} = this.state;
-        if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cardsOnHand.length <1){
+      else if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cardsOnHand.length >0){
+        const firstPokemon = cardsOnHand[0]
+        const newCards = cardsOnHand
+        newCards.shift()
           this.setState({
-            loose:true,
+            playerPokemon1:{...firstPokemon,attacked:false,pokeNum:1},
+            cardsOnHand:newCards,
+          },()=>{
+            this.enemyTurn()
           })
         }
-      })
+        else {
+          this.enemyTurn();
+        }
     }
     looseBattle = ()=>{
       window.location.replace('/loose')
@@ -221,7 +238,7 @@ export default class SinglePlayer extends Component {
         }} className={`text${e.type.name}  w-28 hover:contrast-200 z-20`}>{e.type.name}</button></div>))}</div>:''}
         {playerPokemon1.hp>0 && playerPokemon1.hp !== undefined?<button id={`playerPokemon${playerPokemon1.name}`}
           onClick={()=>{this.attack('playerPokemon1')}}
-        ><RenderPokemon pokemon={playerPokemon1}/></button>:<button onClick={()=>{this.summonPokemon('playerPokemon1')}}><div  className='pokeCard emptyCard'/></button>}
+        className={`${playerPokemon1.attacked?'opacity-50':''}`}><RenderPokemon pokemon={playerPokemon1}/></button>:<button onClick={()=>{this.summonPokemon('playerPokemon1')}}><div  className='pokeCard emptyCard'/></button>}
                 {attackMode && pokemonAttacker.name === playerPokemon2.name?<div className='absolute'>{pokemonAttacker.types.map((e)=>(<div key={`${e.type.name}button`} className='flex justify-around'><button onClick={()=>{
           this.setState({
             attackType:e.type.name,
@@ -229,7 +246,7 @@ export default class SinglePlayer extends Component {
         }} className={`text${e.type.name} w-28 hover:contrast-200 z-20`}>{e.type.name}</button></div>))}</div>:''}
         {playerPokemon2.hp>0 && playerPokemon2.hp !== undefined?<button id={`playerPokemon${playerPokemon2.name}`}
             onClick={()=>{this.attack('playerPokemon2')}}
-        ><RenderPokemon pokemon={playerPokemon2}/></button>:<button onClick={()=>{this.summonPokemon('playerPokemon2')}}><div  className='pokeCard emptyCard'/></button>}
+            className={`${playerPokemon2.attacked?'opacity-50':''}`}><RenderPokemon pokemon={playerPokemon2}/></button>:<button onClick={()=>{this.summonPokemon('playerPokemon2')}}><div  className='pokeCard emptyCard'/></button>}
         </div>
           </div>
           <div className=' flex justify-center float-right w-20 flex-wrap buttonsContainer'>
