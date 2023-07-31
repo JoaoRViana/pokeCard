@@ -30,8 +30,8 @@ export default class SinglePlayerMenu extends Component {
     setTrainer = async(trainer)=>{
       if(trainer.name ==='Random'){
         const cards = []
-        for(let i = 0;i <7;i++){
-          let randomNumber  = Math.round((Math.random()*(251- 1)+1))
+        for(let i = 0;i <6;i++){
+          let randomNumber  = Math.round((Math.random()*(649- 1)+1))
           const pokemon = await genPokemon(await getPokemon(randomNumber))
           cards.push(pokemon)
         }

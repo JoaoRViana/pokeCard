@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getCards, getDecks, removeDeck, saveDeck } from '../utils'
+import { getCards, getDecks, removeCard, removeDeck, saveDeck } from '../utils'
 import RenderCard from '../Components/RenderCard';
 import Header from '../Components/Header';
 import RenderDeck from '../Components/RenderDeck';
@@ -85,6 +85,14 @@ export default class Deck extends Component {
             })
         })
     }
+    deleteCard = (card)=>{
+        const cards = removeCard(card);
+        this.setState({
+            cards,
+        },()=>{
+            this.filtredCards();
+        })
+    }
     addDeck = ()=>{
         const {deckSelected,deckName,deck,edit,deckIndex} = this.state
         let lastid = 1
@@ -148,9 +156,9 @@ export default class Deck extends Component {
                 <button onClick={this.creationDeck}>Criar Deck</button>
             </div>
         </div>:''}
-        {onCreation?  <div className='flex justify-between flex-wrap mt-10'>
-        <h1 className='w-full ml-5 styledText'>Your Deck</h1>
-        <div className=' flex justify-around flex-wrap w-2/6 bg-stone-200 ml-3 h-fit mt-5 rounded-xl py-2 min-h-[550px] border-teal-400 border-2'>
+        {onCreation?  <div className='flex justify-around flex-wrap mt-10'>
+            {deckSelected.length ===6?'':<h1 className='w-full ml-5 styledText'>Your Deck</h1>}
+        <div className='min-w-[310px] flex justify-around flex-wrap w-2/6 bg-stone-200 ml-3 h-fit mt-5 rounded-xl py-2 min-h-[550px] border-teal-400 border-2'>
         {deckSelected.length===6?
         <div className='flex flex-wrap justify-center w-44 w-full h-40'>
             <div className='flex flex-wrap justify-center w-20 '>
@@ -172,7 +180,9 @@ export default class Deck extends Component {
         {cardsFiltred.map((e,i)=>(
                 <div key={`${e.name}${i}Cards`} className='m-10'>
                     <button  onClick={()=>{this.addCardOnDeck(e)}} className='absolute ml-5 mt-1 w-8 h-8 z-10 text-sm bg-blue-500 hover:text-emerald-400 text-white font-bold py-1 px-1 border-s-4 border-red-800 rounded-tl-3xl rounded-br-3xl '>+</button>
+                    <button  onClick={()=>{this.deleteCard(e)}} className='absolute ml-[237px] mt-[314px] w-8 h-8 z-10 text-sm bg-red-500 hover:text-purple-700 text-white font-bold py-1 px-1 border-e-4 border-red-800 rounded-tl-3xl rounded-br-3xl '>-</button>
                     <RenderCard pokemon={e}/>
+
     </div>
                 
         ))}

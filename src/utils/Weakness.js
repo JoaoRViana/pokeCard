@@ -29,7 +29,7 @@ const resitances = {
     ghost:['normal','fighting','poison','bug'],
     steel:['normal','flying','poison','rock','bug','steel','grass','psychic','ice','dragon','fairy'],
     fire:['bug','steel','fire','grass','ice','fairy'],
-    water:['steel','fire','water','psychic'],
+    water:['steel','fire','water','ice'],
     grass:['ground','water','grass','electric'],
     electric:['flying','steel','electric'],
     psychic:['fighting','psychic'],

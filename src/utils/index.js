@@ -47,6 +47,14 @@ export const removeDeck = (deck)=>{
     localStorage.setItem('deckPokemon',JSON.stringify(newDecks))
 }
 
+export const removeCard = (card)=>{
+    const oldDecks = JSON.parse(localStorage.getItem('cardPokemon'))||[];
+    const filter = oldDecks.filter((e)=>(e.name !== card.name && e.attack !== card.attack && e.hp !== card.hp))
+    const newCards = [...filter]
+    localStorage.setItem('cardPokemon',JSON.stringify(newCards))
+    return newCards
+}
+
 export const getDecks = ()=>{
     return JSON.parse(localStorage.getItem('deckPokemon')) ||[];
 }
@@ -78,7 +86,6 @@ export const enemyDamage = (enemy,playerPokemons)=>{
                 return {playerPokemon:playerPokemon.name,pokemon:`playerPokemon${playerPokemon.pokeNum}`,attack:Math.floor((enemy.attack)*(((weak.length >0?(weak.length)*2:1))/(resis.length >0?(resis.length)*2:1))),type:enemyType}
             })
     })
-    console.log(damages)
     let bestDamage = {attack:1}
     damages.forEach((e)=>{
         e.forEach((e)=>{
