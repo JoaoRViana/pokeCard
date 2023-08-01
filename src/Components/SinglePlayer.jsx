@@ -10,8 +10,7 @@ import Cards from '../utils/Cards.ts'
 export default class SinglePlayer extends Component {
     state = {
         deck:{cards:[]},
-        allCards:[],
-        cardsOnHand:[],
+        cards:{allCards:[],cardsOnHand:[]},
         selectedCardOnHand:'',
         playerPokemon1:{},
         playerPokemon2:{},
@@ -44,16 +43,10 @@ export default class SinglePlayer extends Component {
     setRandomCards = ()=>{
       const {deck:{cards},enemyDeck}= this.state;
       const newCards = new Cards(cards)
-      newCards.randomizeCards();
-      newCards.buyCard()
-      newCards.buyCard()
-      newCards.buyCard()
-      const cardsOnHand = newCards.cardsOnHand
-      const allCards = newCards.allCards
+      newCards.initialGame();
       const enemyCards = shuffle(enemyDeck)
       this.setState({
-        allCards,
-        cardsOnHand,
+        cards:newCards,
         enemyDeck:enemyCards
       },async ()=>{
         await this.getEnemyPokemon('enemyPokemon1')
@@ -61,23 +54,21 @@ export default class SinglePlayer extends Component {
       })
     }
     buyCard = ()=>{
-      const {allCards,cardsOnHand} = this.state
-        this.setState({
-          cardsOnHand:[...cardsOnHand,allCards[0]],
-          buy:true,
-        },()=>{
-          allCards.shift()
-        })
+      const {cards} = this.state
+      cards.buyCard()
+      this.setState({
+        cards,
+        buy:true
+      })
     }
     summonPokemon = (pokemon) =>{
-      const {selectedCardOnHand,cardsOnHand} = this.state;
-      const selecteds = cardsOnHand.filter((e)=>(e.name !==selectedCardOnHand.name));
+      const {selectedCardOnHand,cards} = this.state;
+      cards.summonCard(selectedCardOnHand)
       const number = pokemon[13]
       selectedCardOnHand.pokeNum = number
       const poke = new Pokemon(selectedCardOnHand)
       this.setState({
         [pokemon] :poke,
-        cardsOnHand:selecteds,
         selectedCardOnHand:false,
       })
     }
@@ -154,7 +145,7 @@ export default class SinglePlayer extends Component {
             })
           }
         })
-      }, 200);
+      }, 100);
 
     }
     enemyTurn = ()=>{
@@ -199,14 +190,14 @@ export default class SinglePlayer extends Component {
       }      
     }
     passTurn = async()=>{
-      const {playerPokemon1,playerPokemon2,cardsOnHand}=this.state;
-      if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cardsOnHand.length <1){
+      const {playerPokemon1,playerPokemon2,cards}=this.state;
+      if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cards.cardsOnHand.length <1){
         this.setState({
           loose:true,
         })
       }
-      else if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cardsOnHand.length >0){
-        const firstPokemon = cardsOnHand[0]
+      else if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cards.cardsOnHand.length >0){
+        const firstPokemon = cards.cardsOnHand[0]
           this.setState({
             selectedCardOnHand:firstPokemon,
           },()=>{
@@ -221,8 +212,31 @@ export default class SinglePlayer extends Component {
     looseBattle = ()=>{
       window.location.replace('/loose')
     }
+    cardOnhandEffect=(card,index)=>{
+      const {cards:{cardsOnHand},selectedCardOnHand} = this.state;
+      this.setState({
+        selectedCardOnHand:cardsOnHand[index]
+      })
+      if(selectedCardOnHand){
+        let index = 0
+        cardsOnHand.forEach((e,i)=>{
+          if(e.name === selectedCardOnHand.name){
+            index =  i
+          }})
+        const oldElement = document.querySelector(`#${selectedCardOnHand.name}${index}`)
+        oldElement.style.filter = '';
+      }
+      const element = document.querySelector(`#${card.name}${index}`)
+      element.style.filter = 'drop-shadow(0 -30px 20px rgb(230, 30, 20))'
+      if(selectedCardOnHand.name === card.name){
+        element.style.filter = ''
+        this.setState({
+          selectedCardOnHand:''
+        })
+      }
+    }
   render() {
-    const {cardsOnHand,playerPokemon1,playerPokemon2,enemyPokemon1,enemyPokemon2,attackMode,pokemonAttacker,win,attackType,buy,allCards,loose}= this.state
+    const {playerPokemon1,playerPokemon2,enemyPokemon1,enemyPokemon2,attackMode,pokemonAttacker,win,attackType,buy,cards,loose}= this.state
     const {trainer} =this.props
     return (
       <div className='bg-zinc-300 py-5'>
@@ -263,35 +277,14 @@ export default class SinglePlayer extends Component {
         </div>
           </div>
           <div className=' flex justify-center float-right w-20 flex-wrap buttonsContainer'>
-          <button onClick={this.buyCard} disabled={buy || allCards.length<1} className='mr-3 w-20 z-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed'>Buy</button>
+          <button onClick={this.buyCard} disabled={buy || cards.allCards.length<1} className='mr-3 w-20 z-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed'>Buy</button>
           <button onClick={this.passTurn} className='mr-3 w-20 mt-2 z-40 bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded'>Pass</button>
         </div>
         <div className='flex-wrap flex justify-center w-auto mx-auto'>
-        {cardsOnHand.map((e,i)=>(
+        {cards.cardsOnHand.map((e,i)=>(
             <div key={`${e.name}${i}`} id={`${e.name}${i}`}>
               <button onClick={()=>{
-                      const {cardsOnHand,selectedCardOnHand} = this.state;
-                      this.setState({
-                        selectedCardOnHand:cardsOnHand[i]
-                      })
-                      if(selectedCardOnHand){
-                        const index = cardsOnHand.map((e,i)=>{
-                          if(e.name === selectedCardOnHand.name){
-                            return i
-                          }
-                          return false
-                        }).filter((e)=>(e !== false))
-                        const oldElement = document.querySelector(`#${selectedCardOnHand.name}${index[0]}`)
-                        oldElement.style.filter = '';
-                      }
-                      const element = document.querySelector(`#${e.name}${i}`)
-                      element.style.filter = 'drop-shadow(0 -30px 20px rgb(230, 30, 20))'
-                      if(selectedCardOnHand.name === e.name){
-                        element.style.filter = ''
-                        this.setState({
-                          selectedCardOnHand:''
-                        })
-                      }
+                this.cardOnhandEffect(e,i)
               }} ><RenderCard pokemon={e}/></button>
             </div>
         ))}
