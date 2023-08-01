@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import RenderDeck from '../Components/RenderDeck';
-import { getDecks,setDeckForPLay,genPokemon,getPokemon,getStarterDeck } from '../utils'
+import { getDecks,setDeckForPLay,genPokemon,getPokemon} from '../utils'
+import { getStarterDeck } from '../utils/starterDeck';
 import {trainers} from '../utils/trainers'
 import SinglePlayer from '../Components/SinglePlayer';
 import Header from '../Components/Header';

@@ -5,6 +5,7 @@ import RenderPokemon from './RenderPokemon'
 import RandomPokemon from '../Pages/RewardsPokemon'
 import { shuffle } from '../utils'
 import { weakness,resitances } from '../utils/Weakness'
+import Pokemon from '../utils/Pokemon.ts'
 
 export default class SinglePlayer extends Component {
     state = {
@@ -68,8 +69,9 @@ export default class SinglePlayer extends Component {
       const {selectedCardOnHand,cardsOnHand} = this.state;
       const selecteds = cardsOnHand.filter((e)=>(e.name !==selectedCardOnHand.name));
       const number = pokemon[13]
+      const poke = new Pokemon(selectedCardOnHand.name,selectedCardOnHand.hp,selectedCardOnHand.attack,selectedCardOnHand.types,selectedCardOnHand.spriteCard,selectedCardOnHand.spriteOnBoard,number)
       this.setState({
-        [pokemon] :{...selectedCardOnHand,...this.state[pokemon],attacked:true,pokeNum:number},
+        [pokemon] :poke,
         cardsOnHand:selecteds,
         selectedCardOnHand:false,
       })
@@ -101,8 +103,9 @@ export default class SinglePlayer extends Component {
     getEnemyPokemon = async(enemy)=>{
       const {enemyCards,enemyDeck} = this.state
       const pokemon = enemyDeck[enemyCards]
+      const poke = new Pokemon(pokemon.name,pokemon.hp,pokemon.attack,pokemon.types,pokemon.spriteCard,pokemon.spriteOnBoard,0)
       this.setState({
-        [enemy]:pokemon,
+        [enemy]:poke,
         enemyCards: enemyCards + 1,
       })
     }
@@ -122,16 +125,17 @@ export default class SinglePlayer extends Component {
     hitEnemy = (enemy)=>{
       const {attackType,pokemonAttacker,pokemonNumber} =this.state
       const choosedEnemy = this.state[enemy];
-      const weak = getWeakness(choosedEnemy.types,{type:{name:attackType}},weakness)
-      const resis = getWeakness(choosedEnemy.types,{type:{name:attackType}},resitances)
+      const choosedPokemon = this.state[pokemonNumber]
+      choosedPokemon.turnAttacked(true)
       const element = document.querySelector(`#playerPokemon${pokemonAttacker.name}`)
       element.style.filter = ''
+      const attack = (choosedPokemon.attack)
       this.hitEffect(`enemyPokemon${choosedEnemy.name}`);
+      const multiplier = choosedEnemy.damageMultiplier(attackType)
+      choosedEnemy.receiveDamage((attack*multiplier))
       this.setState({
-        [enemy]:{...this.state[enemy],hp: Math.floor(this.state[enemy].hp -(pokemonAttacker.attack)*(((weak.length >0?(weak.length)*2:1))/(resis.length >0?(resis.length)*2:1)) )},
         attackMode:false,
         attackType:'',
-        [pokemonNumber]:{...this.state[pokemonNumber],attacked:true}
       },()=>{
         const {enemyCards,enemyPokemon1,enemyPokemon2,enemyDeck} = this.state
         const enemyhp = this.state[enemy].hp;
@@ -145,7 +149,15 @@ export default class SinglePlayer extends Component {
       })
     }
     enemyTurn = ()=>{
-      const {enemyPokemon1,enemyPokemon2} = this.state;
+      const {enemyPokemon1,enemyPokemon2,playerPokemon1,playerPokemon2} = this.state;
+      if(playerPokemon1.name !== undefined){
+        playerPokemon1.turnAttacked(false);
+      }if(playerPokemon2.name !== undefined){
+        playerPokemon2.turnAttacked(false)
+      }
+      this.setState({
+        buy:false,
+      })
       setTimeout(()=>{
         if(enemyPokemon1.hp >0){
           this.hitPlayer(enemyPokemon1)
@@ -156,11 +168,6 @@ export default class SinglePlayer extends Component {
           this.hitPlayer(enemyPokemon2)
         }
       }, 600);
-      this.setState({
-        buy:false,
-        playerPokemon1:{...this.state.playerPokemon1,attacked:false},
-        playerPokemon2:{...this.state.playerPokemon2,attacked:false},
-      })
     }
     hitPlayer = (enemy)=>{
       const {playerPokemon1,playerPokemon2} = this.state;
@@ -169,13 +176,15 @@ export default class SinglePlayer extends Component {
         const playerPokemon = damage.pokemon
         const element = document.querySelector(`#playerPokemon${damage.playerPokemon}`)
         element.style.filter = ''
+        const poke = this.state[playerPokemon]
+        poke.receiveDamage(damage.attack)
         if((this.state[playerPokemon].hp - damage.attack) <1){
           this.setState({
-            [playerPokemon]:{attacked:false,pokeNum:damage.pokeNum}
+            [playerPokemon]:'',
           })
         }else{
           this.setState({
-            [playerPokemon]:{...this.state[playerPokemon],hp:(this.state[playerPokemon].hp - damage.attack)}
+            [playerPokemon]:poke
           })
         }
         this.hitEffect(`playerPokemon${damage.playerPokemon}`)
@@ -190,12 +199,10 @@ export default class SinglePlayer extends Component {
       }
       else if(playerPokemon1.hp === undefined && playerPokemon2.hp === undefined && cardsOnHand.length >0){
         const firstPokemon = cardsOnHand[0]
-        const newCards = cardsOnHand
-        newCards.shift()
           this.setState({
-            playerPokemon1:{...firstPokemon,attacked:false,pokeNum:1},
-            cardsOnHand:newCards,
+            selectedCardOnHand:firstPokemon,
           },()=>{
+            this.summonPokemon('playerPokemon1')
             this.enemyTurn()
           })
         }
