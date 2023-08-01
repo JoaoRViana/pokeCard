@@ -1,6 +1,8 @@
 import { getWeakness } from ".";
+import { TPokemon } from "../types";
 import { weakness } from "./Weakness";
 import { resitances } from "./Weakness";
+
 
 export default class Pokemon {
     public name:string;
@@ -11,15 +13,15 @@ export default class Pokemon {
     public spriteOnBoard:string;
     public attacked:boolean;
     public pokeNum:number;
-    constructor(name:string,hp:number,attack:number,types:{},spriteCard:string,spriteOnBoard:string,pokeNum:number){
-        this.attack =attack;
-        this.hp = hp;
-        this.name = name;
-        this.spriteCard = spriteCard;
-        this.spriteOnBoard = spriteOnBoard;
-        this.types = types;
+    constructor(pokemon:TPokemon){
+        this.attack =pokemon.attack;
+        this.hp = pokemon.hp;
+        this.name = pokemon.name;
+        this.spriteCard = pokemon.spriteCard;
+        this.spriteOnBoard = pokemon.spriteOnBoard;
+        this.types = pokemon.types;
         this.attacked = true;
-        this.pokeNum = pokeNum
+        this.pokeNum = pokemon.pokeNum
     }
     receiveDamage(attack:number):void{
         this.hp = Math.floor(this.hp-attack)
