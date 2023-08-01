@@ -1,4 +1,4 @@
-import { shuffle } from "."
+import { shuffle } from "./helpers"
 import { TCard } from "../types"
 
 
@@ -10,6 +10,7 @@ export default class Cards {
     constructor(allCards:[]){
         this.allCards = allCards
         this.cardsOnHand = []
+        this.buy = true
     }
     randomizeCards():void{
         const randomize = shuffle(this.allCards);

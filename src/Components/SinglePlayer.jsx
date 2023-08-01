@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { enemyDamage, getSetDeckForPlay } from '../utils'
+import { enemyDamage, getSetDeckForPlay,shuffle } from '../utils/helpers.ts'
 import RenderCard from './RenderCard'
 import RenderPokemon from './RenderPokemon'
 import RandomPokemon from '../Pages/RewardsPokemon'
-import { shuffle } from '../utils'
 import Pokemon from '../utils/Pokemon.ts'
 import Cards from '../utils/Cards.ts'
 

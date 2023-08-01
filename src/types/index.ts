@@ -15,6 +15,11 @@ export type TCard = {
     spriteCard:string,
     types:Types[]
 }
-type Types = {
+export type TDeck ={
+    id:number,
+    cards:TCard[],
+    name:string,
+}
+export type Types = {
     type:{name:string}
 }

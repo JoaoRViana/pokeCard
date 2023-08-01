@@ -1,12 +1,13 @@
-import { resitances, weakness } from "./Weakness";
+import { TCard, TDeck, TPokemon, Types } from "../types";
+import {weakness,resitances} from "../utils/Weakness";
 
-export async function getPokemon (id){
+export async function getPokemon (id:number){
     const api = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
     const data = await api.json();
     return data;
 };
 
-export async function genPokemon(pokemon){
+export async function genPokemon(pokemon:any){
     const randomIvHp = Math.round(Math.random()*(100 - 80)+80)
     let hp = Math.round(pokemon.stats[0].base_stat*((pokemon.stats[1].base_stat > pokemon.stats[3].base_stat?pokemon.stats[1].base_stat:pokemon.stats[3].base_stat)/20))
     hp = Math.round(hp* (randomIvHp/100));
@@ -23,52 +24,52 @@ export async function genPokemon(pokemon){
     return {attack,hp,spriteCard,spriteOnBoard,name:pokemon.name,types:pokemon.types, }
 }
 
-export const saveCard = (pokemon)=>{
-    const oldPokemons = JSON.parse(localStorage.getItem('cardPokemon'))||[];
+export const saveCard = (pokemon:TPokemon)=>{
+    const oldPokemons = JSON.parse(localStorage.getItem('cardPokemon')||'')||[];
     const newPokemons = [...oldPokemons,pokemon]
     localStorage.setItem('cardPokemon',JSON.stringify(newPokemons))
 }
 
 export const getCards = ()=>{
-    return JSON.parse(localStorage.getItem('cardPokemon')) ||[];;
+    return JSON.parse(localStorage.getItem('cardPokemon')||'') ||[];;
 }
 
-export const saveDeck = (deck)=>{
-    const oldDecks = JSON.parse(localStorage.getItem('deckPokemon'))||[];
-    const filter = oldDecks.filter((e)=>(e.id !== deck.id))
+export const saveDeck = (deck:TDeck)=>{
+    const oldDecks = JSON.parse(localStorage.getItem('deckPokemon')||'')||[];
+    const filter = oldDecks.filter((e:TDeck)=>(e.id !== deck.id))
     const newDecks = [...filter,deck]
     localStorage.setItem('deckPokemon',JSON.stringify(newDecks))
 }
 
-export const removeDeck = (deck)=>{
-    const oldDecks = JSON.parse(localStorage.getItem('deckPokemon'))||[];
-    const filter = oldDecks.filter((e)=>(e.id !== deck.id))
+export const removeDeck = (deck:TDeck)=>{
+    const oldDecks = JSON.parse(localStorage.getItem('deckPokemon')||'')||[];
+    const filter = oldDecks.filter((e:TDeck)=>(e.id !== deck.id))
     const newDecks = [...filter]
     localStorage.setItem('deckPokemon',JSON.stringify(newDecks))
 }
 
-export const removeCard = (card)=>{
-    const oldDecks = JSON.parse(localStorage.getItem('cardPokemon'))||[];
-    const filter = oldDecks.filter((e)=>(e.name !== card.name && e.attack !== card.attack && e.hp !== card.hp))
+export const removeCard = (card:TCard)=>{
+    const oldDecks = JSON.parse(localStorage.getItem('cardPokemon')||'')||[];
+    const filter = oldDecks.filter((e:TCard)=>(e.name !== card.name && e.attack !== card.attack && e.hp !== card.hp))
     const newCards = [...filter]
     localStorage.setItem('cardPokemon',JSON.stringify(newCards))
     return newCards
 }
 
 export const getDecks = ()=>{
-    return JSON.parse(localStorage.getItem('deckPokemon')) ||[];
+    return JSON.parse(localStorage.getItem('deckPokemon')||'') ||[];
 }
 
-export const setDeckForPLay = (deck)=>{
+export const setDeckForPLay = (deck:TDeck)=>{
     localStorage.setItem('deckForPlay',JSON.stringify(deck))
 }
 
 export const getSetDeckForPlay = ()=>{
-    return JSON.parse(localStorage.getItem('deckForPlay'))||[];
+    return JSON.parse(localStorage.getItem('deckForPlay')||'')||[];
 }
 
-export const getWeakness =(advPokemon,mainPokemonType,arrayTypes)=>{
-    const weak = advPokemon.map((e)=>{
+export const getWeakness =(advPokemon:Types[],mainPokemonType:string,arrayTypes:any)=>{
+    const weak = advPokemon.map((e:Types)=>{
         if(arrayTypes[e.type.name].includes(mainPokemonType)){
             return 1
         } return false
@@ -76,10 +77,10 @@ export const getWeakness =(advPokemon,mainPokemonType,arrayTypes)=>{
     return weak
 }
 
-export const enemyDamage = (enemy,playerPokemons)=>{
+export const enemyDamage = (enemy:TPokemon,playerPokemons:[])=>{
     const playerPokemonsFiltred = playerPokemons.filter((e)=>(e!==false))
         const damages = enemy.types.map((enemyType)=>{
-            return playerPokemonsFiltred.map((playerPokemon)=>{
+            return playerPokemonsFiltred.map((playerPokemon:TPokemon)=>{
                 const playerTypes = playerPokemon.types;
                 const type = enemyType.type.name
                 const weak = getWeakness(playerTypes,type,weakness)
@@ -97,7 +98,7 @@ export const enemyDamage = (enemy,playerPokemons)=>{
     })
     return bestDamage
 }
-export const shuffle = (array) => {
+export const shuffle = (array:[]) => {
   let currentIndex = array.length,  randomIndex;
   while (currentIndex !== 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);

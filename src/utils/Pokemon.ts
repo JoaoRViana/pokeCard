@@ -1,5 +1,5 @@
-import { getWeakness } from ".";
-import { TPokemon } from "../types";
+import { getWeakness } from "./helpers";
+import { TPokemon, Types } from "../types";
 import { weakness } from "./Weakness";
 import { resitances } from "./Weakness";
 
@@ -8,7 +8,7 @@ export default class Pokemon {
     public name:string;
     public hp:number;
     public attack:number;
-    public types:{};
+    public types:Types[];
     public spriteCard:string;
     public spriteOnBoard:string;
     public attacked:boolean;

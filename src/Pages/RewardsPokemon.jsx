@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { genPokemon, getPokemon, saveCard } from '../utils'
+import { genPokemon, getPokemon, saveCard } from '../utils/helpers.ts'
 import RenderPokemon from '../Components/RenderPokemon'
 import Header from '../Components/Header'
 
