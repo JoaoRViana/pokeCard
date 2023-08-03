@@ -46,8 +46,8 @@ const trainers =[{
         }
     ]
 },{
-    attack: 99,
-    hp: 792,
+    attack: 39,
+    hp: 592,
     spriteCard: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/143.png",
     spriteOnBoard: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/143.png",
     name: "snorlax",
