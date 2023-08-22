@@ -62,7 +62,8 @@ export default class SinglePlayer extends Component {
     }
     summonPokemon = (pokemon) =>{
       const {selectedCardOnHand,cards} = this.state;
-      cards.summonCard(selectedCardOnHand)
+      try {
+        cards.summonCard(selectedCardOnHand)
       const number = pokemon[13]
       selectedCardOnHand.pokeNum = number
       const poke = new Pokemon(selectedCardOnHand)
@@ -70,6 +71,9 @@ export default class SinglePlayer extends Component {
         [pokemon] :poke,
         selectedCardOnHand:false,
       })
+      } catch (error) {
+      }
+      
     }
     attack = (pokemon)=>{
       const {pokemonAttacker} =this.state
@@ -244,16 +248,16 @@ export default class SinglePlayer extends Component {
     }
     const {trainer} =this.props
     return (
-      <div className='bg-zinc-300 py-5 min-h-[1700px] '>
+      <div className='bg-zinc-300 py-5 '>
         <div>
         {loose?this.looseBattle():''}
         </div>
         {win?<RandomPokemon min={trainer.min} max={trainer.max}/>:
         <div>
-          <div className='bg-slate-100 w-4/5 min-w-[720px] mx-auto shadow-md'>
+          <div className='bg-slate-100 w-4/5 mx-auto shadow-md'>
             <Battle battle={battle}/>
           </div>
-          <div className=' flex justify-center float-right w-20 flex-wrap buttonsContainer'>
+          <div className=' flex justify-center float-right w-20 flex-wrap buttonsContainer mr-2'>
           <button onClick={this.buyCard} disabled={buy || cards.allCards.length<1} className='mr-3 w-20 z-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed'>Buy</button>
           <button onClick={this.passTurn} className='mr-3 w-20 mt-2 z-40 bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded'>Pass</button>
         </div>
