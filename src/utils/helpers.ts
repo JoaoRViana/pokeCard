@@ -25,7 +25,7 @@ export async function genPokemon(pokemon:any){
 }
 
 export const saveCard = (pokemon:TPokemon)=>{
-    const storedData = localStorage.getItem('deckPokemon');
+    const storedData = localStorage.getItem('cardPokemon');
     const oldPokemons: TPokemon[] = storedData ? JSON.parse(storedData) : []; 
     const newPokemons = [...oldPokemons,pokemon]
     localStorage.setItem('cardPokemon',JSON.stringify(newPokemons))
