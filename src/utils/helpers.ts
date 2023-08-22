@@ -25,31 +25,37 @@ export async function genPokemon(pokemon:any){
 }
 
 export const saveCard = (pokemon:TPokemon)=>{
-    const oldPokemons = JSON.parse(localStorage.getItem('cardPokemon')||'')||[];
+    const storedData = localStorage.getItem('deckPokemon');
+    const oldPokemons: TPokemon[] = storedData ? JSON.parse(storedData) : []; 
     const newPokemons = [...oldPokemons,pokemon]
     localStorage.setItem('cardPokemon',JSON.stringify(newPokemons))
 }
 
 export const getCards = ()=>{
-    return JSON.parse(localStorage.getItem('cardPokemon')||'') ||[];;
+    const storedData = localStorage.getItem('cardPokemon');
+    const cards: TCard[] = storedData ? JSON.parse(storedData) : [];
+    return cards
 }
 
 export const saveDeck = (deck:TDeck)=>{
-    const oldDecks = JSON.parse(localStorage.getItem('deckPokemon')||'')||[];
+    const storedData = localStorage.getItem('deckPokemon');
+    const oldDecks: TDeck[] = storedData ? JSON.parse(storedData) : []; 
     const filter = oldDecks.filter((e:TDeck)=>(e.id !== deck.id))
     const newDecks = [...filter,deck]
     localStorage.setItem('deckPokemon',JSON.stringify(newDecks))
 }
 
 export const removeDeck = (deck:TDeck)=>{
-    const oldDecks = JSON.parse(localStorage.getItem('deckPokemon')||'')||[];
+    const storedData = localStorage.getItem('deckPokemon');
+    const oldDecks: TDeck[] = storedData ? JSON.parse(storedData) : []; 
     const filter = oldDecks.filter((e:TDeck)=>(e.id !== deck.id))
     const newDecks = [...filter]
     localStorage.setItem('deckPokemon',JSON.stringify(newDecks))
 }
 
 export const removeCard = (card:TCard)=>{
-    const oldDecks = JSON.parse(localStorage.getItem('cardPokemon')||'')||[];
+    const storedData = localStorage.getItem('cardPokemon');
+    const oldDecks: TCard[] = storedData ? JSON.parse(storedData) : []; 
     const filter = oldDecks.filter((e:TCard)=>(e.name !== card.name && e.attack !== card.attack && e.hp !== card.hp))
     const newCards = [...filter]
     localStorage.setItem('cardPokemon',JSON.stringify(newCards))
@@ -57,7 +63,9 @@ export const removeCard = (card:TCard)=>{
 }
 
 export const getDecks = ()=>{
-    return JSON.parse(localStorage.getItem('deckPokemon')||'') ||[];
+    const storedData = localStorage.getItem('deckPokemon');
+    const cards: TPokemon[] = storedData ? JSON.parse(storedData) : []; 
+    return cards;
 }
 
 export const setDeckForPLay = (deck:TDeck)=>{
