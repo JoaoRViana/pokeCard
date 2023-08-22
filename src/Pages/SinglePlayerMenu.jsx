@@ -48,8 +48,10 @@ export default class SinglePlayerMenu extends Component {
         {trainerSelected && !startGame?
                     <button className='text-2xl styledText ml-10 mt-5' onClick={()=>{this.setState({trainerSelected:false})}}>Back</button>
                   :''}
-        {startGame?<SinglePlayer trainer={trainer}/>:
-        <div className=' flex flex-wrap justify-between w-screen '>
+        {startGame?<div className='min-w-[800px] min-h-[1000px]'>
+          <SinglePlayer trainer={trainer}/>
+          </div>:
+        <div className=' flex flex-wrap justify-between w-screen  '>
         <div>
           {trainerSelected?
           <div className='flex flex-wrap justify-around '>

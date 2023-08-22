@@ -186,7 +186,6 @@ export default class SinglePlayer extends Component {
     passTurn = async()=>{
       const {playerPokemon1,playerPokemon2,cards}=this.state;
       if((playerPokemon1.hp === undefined || playerPokemon1.hp <0)  && (playerPokemon2.hp === undefined || playerPokemon2.hp <0) && cards.cardsOnHand.length <1){
-        console.log('b')
         this.setState({
           loose:true,
         })
@@ -245,13 +244,13 @@ export default class SinglePlayer extends Component {
     }
     const {trainer} =this.props
     return (
-      <div className='bg-zinc-300 py-5'>
+      <div className='bg-zinc-300 py-5 min-h-[1700px] '>
         <div>
         {loose?this.looseBattle():''}
         </div>
         {win?<RandomPokemon min={trainer.min} max={trainer.max}/>:
         <div>
-          <div className='bg-slate-100 w-1/2 mx-auto shadow-md'>
+          <div className='bg-slate-100 w-4/5 min-w-[720px] mx-auto shadow-md'>
             <Battle battle={battle}/>
           </div>
           <div className=' flex justify-center float-right w-20 flex-wrap buttonsContainer'>
