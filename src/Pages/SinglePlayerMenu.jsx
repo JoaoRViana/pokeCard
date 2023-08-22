@@ -43,7 +43,7 @@ export default class SinglePlayerMenu extends Component {
   render() {
     const {decks,deckSeted,startGame,trainerSelected,trainer} = this.state;
     return (
-      <div >
+      <div>
         {!startGame?<Header/>:''}
         {trainerSelected && !startGame?
                     <button className='text-2xl styledText ml-10 mt-5' onClick={()=>{this.setState({trainerSelected:false})}}>Back</button>
@@ -52,21 +52,22 @@ export default class SinglePlayerMenu extends Component {
         <div className=' flex flex-wrap justify-between w-screen '>
         <div>
           {trainerSelected?
-          <div className='flex flex-wrap justify-around w-screen '>
-            <div className={`flex flex-wrap justify-between w-1/5 h-40 ml-10 mt-5 ${trainer.image} bg-contain bg-no-repeat bg-center `}>
-            <h3 className='text-2xl styledText mt-2 h-35 w-full text-start h-full'>{trainer.name}</h3>
-            <div>
-            <div>
-        {deckSeted?<div className='flex justify-center flex-wrap'><h2 className='text-2xl styledText'>Choosed Deck:</h2>
+          <div className='flex flex-wrap justify-around '>
+            <div className='flex justify-center flex-wrap w-full' >
+            <h3 className='text-2xl styledText mt-2 w-full text-center h-10'>{trainer.name}</h3>
+            <div className={`w-full 1/5 min-w-[150px] min-h-[150px] h-40 mt-5 ${trainer.image} bg-contain bg-no-repeat bg-center p-10 `}>
+            </div>
+            
+            </div>
+            <div  className='flex justify-center flex-wrap'>
+        {deckSeted?<div className='text-center justify-center'>
+          <h2 className='text-2xl styledText'>Choosed Deck:</h2>
         <div>
           <RenderDeck deck={deckSeted}/>
         </div>
         <button onClick={()=>{this.setState({startGame:true})}} className='text-2xl styledText bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded'>startGame</button>
         </div>:''}
         </div>
-            </div>
-            </div>
-            
             <div className='flex flex-wrap justify-around'>
               <h2 className='text-2xl styledText text-center w-full'>Decks:</h2>
             {decks.map((e,i)=>(
@@ -75,6 +76,7 @@ export default class SinglePlayerMenu extends Component {
                 <RenderDeck deck={e}/>
                 </div>
                   <button onClick={()=>{setDeckForPLay(e)
+                   window.scrollTo(0, 180)
                   this.setState({
                       deckSeted:e
                   })}}
@@ -82,12 +84,11 @@ export default class SinglePlayerMenu extends Component {
               </div>
           ))}
             </div>
-            
-          </div>:<div className='w-screen'>
+          </div>:<div className='w-full flex justify-center flex-wrap'>
             {trainers.map((e)=>(
-           <button onClick={()=>{this.setTrainer(e)}} className={`flex flex-wrap justify-between w-1/5 h-40 ml-10 mt-5 ${e.image} bg-contain bg-no-repeat bg-center `} key={`${e.name}DuelBttn`}>
-            <h3 className='text-2xl styledText mt-2 h-35 w-full text-start'>{e.name}</h3>
-            <h3 className='text-2xl styledText mt-12 w-full text-end'>Duel</h3>
+           <button onClick={()=>{this.setTrainer(e)}} className={`flex flex-wrap justify-center w-2/5 h-60 p-10 ml-10 mt-5 `} key={`${e.name}DuelBttn`}>
+            <div className={`h-full w-full min-w-[150px] min-h-[150px] ${e.image} bg-contain bg-no-repeat bg-center`}></div>
+            <h3 className='text-2xl styledText mt-2 h-35 w-full '>{e.name}</h3>
             </button>
         ))}</div>}
         </div>
