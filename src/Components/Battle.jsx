@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import RenderPokemon from './RenderPokemon'
 
 export default class Battle extends Component {
+
   render() {
     const {battle:{enemyPokemon1,enemyPokemon2,playerPokemon1,playerPokemon2,attackMode,attackType,pokemonAttacker,hitEnemy,summonPokemon,attack,setAttackType}} = this.props
     return (
