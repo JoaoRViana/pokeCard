@@ -28,7 +28,15 @@ export default class SinglePlayer extends Component {
     }
     componentDidMount(){
         this.getPlayerDeck();
-
+        if(window.innerWidth < 1200){
+          this.zoomOut()
+        }
+    }
+    zoomOut = ()=>{
+      const battleDiv = document.getElementById('battleDiv')
+      battleDiv.style.transform = 'scale(0.9)';
+      const cardsOnHandDiv = document.getElementById('cardsOnHandDiv')
+      cardsOnHandDiv.style.transform = 'scale(0.9)'
     }
     getPlayerDeck = ()=>{
       const {trainer} = this.props
@@ -254,14 +262,16 @@ export default class SinglePlayer extends Component {
         </div>
         {win?<RandomPokemon min={trainer.min} max={trainer.max}/>:
         <div>
-          <div className='bg-slate-100 w-4/5 mx-auto shadow-md'>
+          <div className='bg-slate-100 w-[90%] mx-auto shadow-md' id='battleDiv'>
             <Battle battle={battle}/>
           </div>
           <div className=' flex justify-center float-right w-20 flex-wrap buttonsContainer mr-2'>
           <button onClick={this.buyCard} disabled={buy || cards.allCards.length<1} className='mr-3 w-20 z-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed'>Buy</button>
           <button onClick={this.passTurn} className='mr-3 w-20 mt-2 z-40 bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded'>Pass</button>
         </div>
-       <CardsOnHand cards={cards} effect={this.cardOnhandEffect}/>
+        <div id='cardsOnHandDiv'>
+          <CardsOnHand cards={cards} effect={this.cardOnhandEffect}/>
+        </div>
 </div>}
       </div>
     )
