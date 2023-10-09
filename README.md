@@ -38,15 +38,10 @@ O aplicativo estará acessível em http://localhost:3000.
 
 ### Sistema de Duelos
 
-- Duelar com Oponentes: Participe de duelos emocionantes de cartas Pokémon contra oponentes controlados pelo computador.
+- Duelar com Oponentes: Participe de duelos contra oponentes controlados pelo computador.
 - Recompensas: Vença um duelo para ganhar 3 cartas Pokémon aleatórias com Valores Individuais (IVs) aleatórios.
 - Raridade Shiny: Há uma chance de 2% de receber uma carta Pokémon shiny como recompensa de duelo.
 
-### Futuras Atualizações
-
-- Modo Versus Online: Desafie outros jogadores em duelos online em tempo real.
-- Contas de Usuário: Crie contas para salvar seus decks, cartas e progresso no jogo.
-- Armazenamento de Cartas e Decks: Armazene suas cartas e decks em um banco de dados seguro para acesso fácil.
 
 ## Integração com API
 
