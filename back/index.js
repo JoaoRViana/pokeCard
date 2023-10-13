@@ -37,8 +37,7 @@ io.on("connection",(socket)=>{
     });
     socket.on("usersInRoom",(data)=>{
         const roomData = rooms.filter((e)=>(e.room ===data.id))[0];
-        console.log(data);
-        console.log(roomData)
+
         io.to(roomData.room).emit("receiveConnection",roomData.users)
       })
       socket.on("getRooms", () => {
@@ -47,12 +46,14 @@ io.on("connection",(socket)=>{
       socket.on("disconnect",()=>{
         rooms.forEach((e,i)=>{
           let newUsers = []
+          console.log(e)
           e.users.forEach((user)=>{
             if(user.id !== socket.id){
               newUsers.push(user)
             }
           })
           rooms[i].users = newUsers;
+          console.log(newUsers)
           io.to(e.room).emit("receiveConnection",newUsers)
           if(e.users.length <1){
             const newRooms = rooms.filter((b)=> e.room !== b.room )

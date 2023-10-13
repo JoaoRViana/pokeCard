@@ -20,6 +20,8 @@ export default function Lobby(){
                         setEnemyName(e.userName)
                     }
                 })
+            }else{
+                setEnemyName('')
             }
         })
         socket.emit('getRooms');
