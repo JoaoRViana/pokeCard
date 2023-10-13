@@ -7,6 +7,7 @@ import SetGame from './Pages/SetGame';
 import SinglePlayerMenu from './Pages/SinglePlayerMenu';
 import LooseBattle from './Pages/LooseBattle';
 import MultiPlayerMenu from './Pages/MultiPlayerMenu';
+import Lobby from './Pages/Lobby';
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
             <Route path ='/deck' element ={<Deck/>}/>
             <Route path ='/play' element={<SetGame/>}></Route>
             <Route path ='/singlePlayer' element={<SinglePlayerMenu/>}></Route>
-            <Route path='multiPlayer' element={<MultiPlayerMenu/>}></Route>
+            <Route path='/multiPlayer' element={<MultiPlayerMenu/>}></Route>
             <Route path ='/loose' element={<LooseBattle/>}></Route>
+            <Route path='/multiPlayer/:id' element={<Lobby/>}></Route>
         </Routes>
     </div>
   );
