@@ -9,8 +9,8 @@ const server = http.createServer(app);
 let rooms = [];
 const io = new Server(server,{
     cors:{
-        origin: "http://localhost:3000",
-        methods: ["GET","POST"],
+      origin: ["http://localhost:3000", "https://pokecard-joaorviana.vercel.app"],
+      methods: ["GET","POST"],
     },
 });
 
@@ -46,14 +46,12 @@ io.on("connection",(socket)=>{
       socket.on("disconnect",()=>{
         rooms.forEach((e,i)=>{
           let newUsers = []
-          console.log(e)
           e.users.forEach((user)=>{
             if(user.id !== socket.id){
               newUsers.push(user)
             }
           })
           rooms[i].users = newUsers;
-          console.log(newUsers)
           io.to(e.room).emit("receiveConnection",newUsers)
           if(e.users.length <1){
             const newRooms = rooms.filter((b)=> e.room !== b.room )
