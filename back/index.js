@@ -3,8 +3,10 @@ const app  = express();
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const router = require('./router');
 
 app.use(cors());
+app.use(router)
 const server = http.createServer(app);
 let rooms = [];
 const io = new Server(server,{
