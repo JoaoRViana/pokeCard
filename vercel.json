@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "builds": [
+      { "src": "front/src", "use": "@vercel/static-build" },
+      { "src": "back/index.js", "use": "@now/node" }
+    ],
+    "routes": [
+      { "src": "/socket.io/(.*)", "dest": "back/index.js" },
+      { "src": "/(.*)", "dest": "front/index.html" }
+    ]
+  }
+  
