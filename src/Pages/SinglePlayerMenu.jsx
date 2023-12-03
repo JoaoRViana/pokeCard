@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import RenderDeck from '../Components/RenderDeck';
 import { getDecks,setDeckForPLay,genPokemon,getPokemon} from '../utils/helpers.ts'
 import { getStarterDeck } from '../utils/starterDeck';
 import {trainers} from '../utils/trainers'
@@ -54,13 +53,16 @@ export default class SinglePlayerMenu extends Component {
     return (
       <div>
         {loading?<h1 className='styledText text-2xl text-center w-full'>Generating Cards...</h1>:<div>
-        {trainerSelected && !startGame?
-                    <button className='text-2xl styledText ml-10 mt-5' onClick={()=>{this.setState({trainerSelected:false})}}>Back</button>
-                  :''}
-        {startGame?<div className='min-w-[800px] min-h-[1000px]'>
+        
+        {startGame?<div className='min-w-[800px] min-h-[1000px] '>
           <SinglePlayer trainer={trainer}/>
           </div>:
-        <div className=' flex flex-wrap justify-around w-screen  '>
+          <div>
+            <Header/>
+            {trainerSelected && !startGame?
+                    <button className='text-2xl styledText ml-10 mt-5' onClick={()=>{this.setState({trainerSelected:false})}}>Back</button>
+                  :''}
+            <div className=' flex flex-wrap justify-around w-screen  '>
         <div>
           {trainerSelected?
           <div className='flex flex-wrap justify-around mt-2'>
@@ -78,7 +80,6 @@ export default class SinglePlayerMenu extends Component {
               <select className='p-2 my-2 h-8 text-xs'
                onChange={(e) => {
                 const selectedDeck = decks.find(deck => deck.name === e.target.value);
-                console.log(e)
                 setDeckForPLay(selectedDeck);
                 this.setState({
                   deckSeted: selectedDeck
@@ -104,7 +105,9 @@ export default class SinglePlayerMenu extends Component {
         ))}</div>}
         </div>
       
-       </div>}
+       </div>
+          </div>
+}
        </div>}
        
         

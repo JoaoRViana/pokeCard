@@ -35,6 +35,11 @@
     z-index: 1;
 }
 
+.pokeImg3d{
+    filter:drop-shadow(0 30px 20px rgb(114, 226, 230));
+    animation:flight 1s ease-in-out infinite;
+}
+
 .pokeView{
   margin-top: -30px;
 }
@@ -74,10 +79,7 @@
     transform: skewY(5deg);
   }
 }
-.pokeImg3d{
-    filter:drop-shadow(0 30px 20px rgb(114, 226, 230));
-    animation:flight 1s ease-in-out infinite;
-}
+
 
 .textwater{
   background: #6890F0;
