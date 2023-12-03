@@ -6,7 +6,7 @@ export default class Battle extends Component {
   render() {
     const {battle:{enemyPokemon1,enemyPokemon2,playerPokemon1,playerPokemon2,attackMode,attackType,pokemonAttacker,hitEnemy,summonPokemon,attack,setAttackType}} = this.props
     return (
-      <div>
+      <div className='p-2'>
         <div className='flex justify-around w-full mx-auto h-96 '>
         {enemyPokemon1.hp>0?<button onClick={()=>{
           if(attackMode && attackType){ hitEnemy('enemyPokemon1')
