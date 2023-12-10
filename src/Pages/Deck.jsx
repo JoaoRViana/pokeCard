@@ -133,9 +133,11 @@ export default class Deck extends Component {
     }
     filtredCards = ()=>{
         const {cards,deckSelected} =this.state
-        let filtred = cards
+        let filtred = deckSelected
         if(deckSelected.length >0){
-            filtred = cards.map((e)=>(deckSelected.includes(e)?false:e)).filter((e)=>e!==false)
+            filtred = cards.filter((e)=>{
+                return !(filtred.some((j)=>(e.name === j.name && e.attack === j.attack && e.hp === j.hp)))
+            })
         }
         this.setState({
             cardsFiltred:filtred
