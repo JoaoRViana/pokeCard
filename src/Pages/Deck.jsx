@@ -133,10 +133,10 @@ export default class Deck extends Component {
     }
     filtredCards = ()=>{
         const {cards,deckSelected} =this.state
-        let filtred = deckSelected
+        let filtred = cards
         if(deckSelected.length >0){
             filtred = cards.filter((e)=>{
-                return !(filtred.some((j)=>(e.name === j.name && e.attack === j.attack && e.hp === j.hp)))
+                return !(deckSelected.some((j)=>(e.name === j.name && e.attack === j.attack && e.hp === j.hp)))
             })
         }
         this.setState({
