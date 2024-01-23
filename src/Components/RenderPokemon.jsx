@@ -6,15 +6,15 @@ export default class RenderPokemon extends Component {
     return (
         <div>
             <div className='poke3d'>
-            <div className='flex justify-evenly styledText absolute w-full  mt-6'>
+            <div className='flex justify-evenly styledText  w-full  '>
                 <h3 >Attack: {pokemon.attack}</h3>
                 <h4 >Hp: {pokemon.hp}</h4>
             </div>
-            <img src={pokemon.spriteOnBoard} alt={pokemon.name} className='w-48  mt-10 ml-16 pokeImg3d'/>
+            <img src={pokemon.spriteOnBoard} alt={pokemon.name} className='w-48 mx-auto pokeImg3d'/>
             </div>
         <div className={`pokeCard text-center border-4 border-red-900 bg-slate-400`}>
             <h1 className='my-5 text-2xl styledText'>{pokemon.name}</h1>
-            <img src={pokemon.spriteCard} alt={pokemon.name} className='w-48 h-48 mt-10 mx-auto'/>
+            <img src={pokemon.spriteCard} alt={pokemon.name} className='w-48 h-48 mx-auto'/>
             <div className='mt-20 flex justify-around'>
                 {pokemon.types.map((e)=>(
                     <h3 className={`styledText text-xl text${e.type.name}`} key={`${e.type.name}${pokemon.name}`}>{e.type.name}</h3>

@@ -238,7 +238,7 @@ export default class SinglePlayer extends Component {
         oldElement.style.filter = '';
       }
       const element = document.querySelector(`#${card.name}${index}`)
-      element.style.filter = 'drop-shadow(0 -30px 20px rgb(230, 30, 20))'
+      element.style.filter = 'drop-shadow(0 -20px 20px rgb(30, 230, 20))'
       if(selectedCardOnHand.name === card.name){
         element.style.filter = ''
         this.setState({
